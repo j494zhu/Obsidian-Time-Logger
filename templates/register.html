@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Register</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    </head>
+    <body>
+        
+        <div class="container" style="max-width: 400px; margin-top: 100px;">
+            
+            <h1 style="text-align: center;">Create Account</h1>
+            
+            <form action="/register" method="POST">
+                <label>Username:</label>
+                <input type="text" name="username" required>
+
+                <label>Password:</label>
+                <input type="password" name="password" required>
+
+                <button type="submit">Sign Up</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 20px;">
+                Already have an account? <a href="/login">Login</a>
+            </p>
+
+        </div> 
+        </body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PyFinance Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header-bar">
+            {% if readonly %}
+                <h4 style="color: #2ecc71;">(只读模式)</h4>
+            {% elif current_user.is_authenticated %}
+                <h4>Hi, {{ current_user.username }}</h4>
+                <a href="/logout" style="color: #e74c3c;">Logout</a>
+            {% endif %}
+        </div>
+
+        {% if not readonly %}
+            <h1>请更新时间记录哦~</h1>
+            <div class="form-container">
+                <form action='/' method='POST'>
+                    <label>Desc:</label>
+                    <input type="text" name="desc" placeholder="e.g. " required>
+
+                    <div class="time-inputs-group">
+                        <div class="time-item">
+                            <label>开始时间:</label>
+                            <input type="time" name="start_time" required>
+                        </div>
+                        <div class="time-item">
+                            <label>结束时间:</label>
+                            <input type="time" name="end_time" required>
+                        </div>
+                    </div>
+
+                    <button type="submit">Add Item</button>
+                </form>
+            </div>
+        {% else %}
+            <h1>历史记录概览</h1>
+        {% endif %}
+
+        <h1 style="margin-top: 40px;">History Flow</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="5%">#</th>
+                    <th width="50%">描述</th>
+                    <th width="15%">开始时间</th>
+                    <th width="15%">结束时间</th>
+                    {% if not readonly %}
+                        <th width="15%">操作</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in expenses %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item.desc }}</td>
+                    <td>{{ item.start_time }}</td> 
+                    <td>{{ item.end_time }}</td> 
+                    
+                    {% if not readonly %}
+                    <td>
+                        <form action="/delete/{{ item.id }}" method="POST" style="margin:0;">
+                            <button type="submit" class="delete-btn" style="color:red; border:none; background:none; cursor:pointer;">Delete</button>
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

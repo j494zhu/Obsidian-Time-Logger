@@ -1,0 +1,200 @@
+/* 全局设置 */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* 👇 改动在这里：不再加载图片，而是用一个清爽的灰白色背景 */
+    background-color: #eef2f5; 
+    /* 或者如果你喜欢渐变色，可以用下面这一行代替上面那行 (二选一) */
+    /* background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); */
+    
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    align-items: flex-start; 
+    padding-top: 50px;
+}
+
+/* 核心容器：白色的卡片 */
+.container {
+    background-color: #ffffff; /* 纯白背景 */
+    padding: 40px;
+    border-radius: 12px; /* 圆角稍微大一点，更现代 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* 很淡的阴影，显精致 */
+    width: 90%;
+    max-width: 800px; 
+    margin-bottom: 50px;
+}
+
+/* 标题样式 */
+h1 {
+    color: #2c3e50;
+    margin-top: 0;
+    border-bottom: 2px solid #f0f0f0; /* 线条颜色淡一点 */
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+h4 {
+    color: #555;
+    margin: 0;
+}
+
+/* 链接样式 */
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+a:hover {
+    text-decoration: underline;
+    color: #2980b9;
+}
+
+/* 输入框样式 */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 20px 0;
+    display: inline-block;
+    border: 1px solid #ddd; /* 边框淡一点 */
+    border-radius: 6px;
+    box-sizing: border-box; 
+    font-size: 14px;
+    background-color: #fafafa; /* 输入框稍微带点底色 */
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #3498db; /* 聚焦时变蓝 */
+    outline: none;
+    background-color: #fff;
+}
+
+/* 主按钮样式 (绿色) */
+button {
+    width: 100%;
+    background-color: #2ecc71; /* 更鲜艳一点的绿色 */
+    color: white;
+    padding: 12px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+button:hover {
+    background-color: #27ae60;
+}
+
+button:active {
+    transform: scale(0.98); /* 点击时微微缩小，有按压感 */
+}
+
+/* 红色删除按钮 */
+.delete-btn {
+    background-color: #e74c3c; 
+    padding: 6px 12px;
+    font-size: 13px;
+    width: auto; 
+    margin: 0;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: separate; /* 为了圆角 */
+    border-spacing: 0;
+    margin-top: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden; /* 藏住表格角的溢出 */
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #666;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase; /* 标题大写 */
+    letter-spacing: 0.5px;
+}
+
+tr:last-child td {
+    border-bottom: none; /* 最后一行去掉底线 */
+}
+
+tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* 用户信息栏 */
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+/* 排序栏 */
+.sort-section {
+    margin-bottom: 20px; 
+    display: flex; 
+    gap: 15px; 
+    align-items: center;
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.sort-section span {
+    color: #555;
+    font-size: 14px;
+}
+
+.sort-section form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 0; 
+    flex-grow: 1; /* 让表单撑满剩余空间 */
+}
+
+.sort-section select {
+    margin: 0;
+    padding: 8px;
+    width: auto;
+    flex-grow: 1; /* 下拉框自动变宽 */
+    max-width: 200px;
+}
+
+.sort-section button {
+    margin: 0;
+    width: auto;
+    padding: 8px 15px;
+    background-color: #3498db; /* 这里的 Go 按钮用蓝色 */
+}
+.sort-section button:hover {
+    background-color: #2980b9;
+}
