@@ -198,3 +198,61 @@ tr:hover {
 .sort-section button:hover {
     background-color: #2980b9;
 }
+
+/* CSS */
+
+/* 给整个时间区域一个背景，像一个卡片一样 */
+.time-inputs-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa; /* 浅灰色背景 */
+    padding: 15px;
+    border-radius: 12px; /* 圆角 */
+    border: 1px solid #e9ecef;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.time-field {
+    display: flex;
+    flex-direction: column; /* Label 在输入框上面，更紧凑 */
+    width: 45%; /* 两个输入框各占不到一半 */
+}
+
+.time-field label {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* 核心：美化原生的 time input */
+input[type="time"] {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* 统一字体 */
+    font-size: 14px;
+    color: #495057;
+    background-color: white;
+    outline: none;
+    transition: all 0.2s ease;
+    
+    /* 这一行很重要：让它在 iOS 上也看起来像个正常的盒子，而不是圆圆的默认样式 */
+    -webkit-appearance: none; 
+}
+
+/* 聚焦时的效果，给一点绿色的光晕，呼应你的按钮 */
+input[type="time"]:focus {
+    border-color: #2ecc71; /* 你的绿色主题色 */
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+}
+
+/* 中间的箭头 */
+.time-separator {
+    color: #adb5bd;
+    font-weight: bold;
+    margin-top: 15px; /* 为了和输入框对齐，因为label占了高度 */
+}

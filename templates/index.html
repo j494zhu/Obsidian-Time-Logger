@@ -24,14 +24,17 @@
                     <label>Desc:</label>
                     <input type="text" name="desc" placeholder="e.g. " required>
 
-                    <div class="time-inputs-group">
-                        <div class="time-item">
-                            <label>开始时间:</label>
-                            <input type="time" name="start_time" required>
+                    <div class="time-inputs-wrapper">
+                        <div class="time-field">
+                            <label for="start_time">From</label>
+                            <input type="time" id="start_time" name="start_time" required>
                         </div>
-                        <div class="time-item">
-                            <label>结束时间:</label>
-                            <input type="time" name="end_time" required>
+                        
+                        <span class="time-separator">→</span>
+                        
+                        <div class="time-field">
+                            <label for="end_time">To</label>
+                            <input type="time" id="end_time" name="end_time" required>
                         </div>
                     </div>
 
