@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template
 from flask import request, redirect
 from flask import session
@@ -9,14 +10,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///finance.db"
+app.secret_key = "dlB93f60saldD0"
+
+database_url = os.environ.get('DATABASE_URL')
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///site.db'
+
+
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-app.secret_key = "any_random_string_here"
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
