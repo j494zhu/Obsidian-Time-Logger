@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History Archive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .history-date-header {
+            background-color: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #495057;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2ecc71;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to Today</a>
+        
+        <h1>📂 History Archives</h1>
+        
+        {% if grouped_history %}
+            {% for date, items in grouped_history.items() %}
+                <div class="history-group">
+                    <div class="history-date-header">
+                        <span>📅 {{ date.strftime('%Y-%m-%d') }}</span>
+                        <span style="font-size: 0.8em; color: #888;">{{ items|length }} items</span>
+                    </div>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>From</th>
+                                <th>To</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td>{{ item.desc }}</td>
+                                <td>{{ item.start_time }}</td>
+                                <td>{{ item.end_time }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; margin-top: 50px; color: #aaa;">
+                <p>No history yet. Start logging your days! 🚀</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
