@@ -242,5 +242,8 @@ def save_notes():
     else:
         current_user.notebook = content
 
+    db.session.commit()
+    return jsonify({"status": "success", "saved_at": datetime.now().strftime("%H:%M:%S")})
+
 if __name__ == '__main__':
     app.run(debug=True)
