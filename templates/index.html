@@ -85,7 +85,7 @@
             </table>
         </div>
 
-        {% if not readonly and expenses|length > 0 %}
+        {% if not readonly %}
             <div class="end-day-section" style="margin-top: 40px; margin-bottom: 60px; text-align: center; border-top: 2px dashed #eee; padding-top: 20px;">
                 <p style="color: #888; font-size: 0.9em;">Ready to wrap up for the day?</p>
                 <form action="/end_day" method="POST" onsubmit="return confirm('End Day? Quick Notes will be cleared.');">
@@ -109,7 +109,7 @@
 
         <div class="note-card" style="background: #d1ecf1; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex: 1; display: flex; flex-direction: column;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <h4 style="margin: 0; color: #0c5460;">📖 NoteBook</h4>
+                <h4 style="margin: 0; color: #0c5460;"># NoteBook</h4>
                 <span id="status-book" style="font-size: 0.8em; color: #0c5460; opacity: 0.6;">Permanent</span>
             </div>
             <textarea id="notebook_area" {% if readonly %}disabled{% endif %}
@@ -162,7 +162,7 @@
     if(quickInput) {
         quickInput.addEventListener('input', debounce(function() {
             saveNote('quick_note', this.value, 'status-quick');
-        }, 3000)); // 1000毫秒 = 1秒
+        }, 1000)); // 1000毫秒 = 1秒
     }
 
     if(bookInput) {

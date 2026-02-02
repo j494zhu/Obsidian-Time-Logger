@@ -36,6 +36,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     expenses = db.relationship('Expenses', backref='user', lazy=True)
+    quick_note = db.Column(db.Text, default="")
+    notebook = db.Column(db.Text, default="")
 
 class Expenses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -133,10 +135,9 @@ def end_day():
         # 如果是手动结束，归档日期就按当前的逻辑日期算
         item.archive_date = current_logical_date
 
-        # empty quick_note
-        current_user.quick_note = ""
-
-        # and do NOT change notebook
+    # empty quick_note
+    current_user.quick_note = ""
+    # and do NOT change notebook
         
     db.session.commit()
     return redirect('/')
