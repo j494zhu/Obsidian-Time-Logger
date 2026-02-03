@@ -5,6 +5,8 @@ from flask_login import UserMixin, LoginManager, login_user, logout_user, curren
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta, date
 
+from routes.login_return import login_bp
+
 app = Flask(__name__)
 app.secret_key = "dlB93f60saldD0"
 
@@ -186,7 +188,7 @@ def register():
         password = request.form.get('password')
         user = User.query.filter_by(username=username).first()
         if user:
-            return "Username is occupied."
+            return render_template('register_failed.html')
         # Hash password
         new_user = User(username=username, password=generate_password_hash(password, method='pbkdf2:sha256'))
         db.session.add(new_user)
@@ -205,7 +207,7 @@ def login():
         if user and check_password_hash(user.password, password):
             login_user(user)
             return redirect('/')
-        return "Invalid credentials"
+        return render_template('login_failed.html')
     else:
         return render_template('login.html')
 
