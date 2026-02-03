@@ -1,9 +1,9 @@
-1. [resolved] 当密码不正确的时候, 不要直接进入一个Invalid username or password. Please try again.
+1. [half resolved] 当密码不正确的时候, 不要直接进入一个Invalid username or password. Please try again.
 的提示页, 最好就要在刚刚的登陆界面, 清空密码然后跳出一个半透明的弹窗, 提示密码错误
 然后可以加上一些动画上面的, 比如把原来的绿色登录按钮短暂地变成红色
 (或者直接在登录按钮上显示信息就可以了, 加上一个抖动的效果, 过2秒钟以后再变回来)
 
-2. [unresolved] 然后如果发生了username is occupied, 同样的处理
+2. [resolved] 然后如果发生了username is occupied, 同样的处理
 
 3. [unresolved] 晚点买一个域名挂上去, 虽然现在的样子勉强也可以接受
 
