@@ -192,13 +192,6 @@ input[type="time"]:focus {
 
 
 
-
-
-/* Body 保持不变，不用动 */
-body {
-    
-}
-
 /* --- 这里开始修改 --- */
 
 .glass-container {
@@ -435,7 +428,7 @@ button.btn-delete-ghost:hover {
 /* 3. 红色按钮样式 (结构与 .green-button 保持一致) */
 .red-button {
     /* 渐变色：从深红到浅红，呼应左侧绿色按钮 */
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
     color: white;
     border: none;
     padding: 12px 35px;
@@ -448,6 +441,63 @@ button.btn-delete-ghost:hover {
 }
 
 .red-button:hover {
-    background: linear-gradient(135deg, #ffe6e3 0%, #ff9a8f 50%, #ffe6e3 100%);
+    background-color: rgba(255, 255, 255, 0.7);
     box-shadow: 0 6px 20px rgba(192, 57, 43, 0.4);
+}
+
+.notes-sidebar {
+    position: sticky; 
+    top: 60px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px;
+    gap: 20px; 
+    height: calc(100vh - 160px);
+
+    width: 280px;
+    min-width: 280px; 
+    max-width: 280px;
+}
+
+/* scrollbar*/
+/* --- 极简毛玻璃滚动条 (Glass Scrollbar) --- */
+
+/* --- 只针对 Notes 板块文本域的滚动条 --- */
+
+/* 1. 宽度设置 */
+.glass-textarea::-webkit-scrollbar {
+    width: 6px; 
+}
+
+/* 2. 轨道 (Track) */
+.glass-textarea::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* 3. 滑块 (Thumb) */
+.glass-textarea::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15); /* 平时淡淡的 */
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+/* 4. 鼠标悬停时的滑块 */
+.glass-textarea::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35); /* 悬停变亮 */
+    cursor: pointer;
+}
+
+/* --- Firefox 兼容性 (针对这个类) --- */
+.glass-textarea {
+    scrollbar-width: thin; 
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.section-title {
+    margin-top: 0; 
+    font-size: 1.2rem; 
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 18px; 
+    text-align: center;
+    font-weight: bold;
 }
