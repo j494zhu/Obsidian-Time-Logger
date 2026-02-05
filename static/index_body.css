@@ -1,0 +1,453 @@
+/*copy from style.css*/
+
+/* 全局设置 */
+body {
+    background-image: 
+        radial-gradient(circle at center, rgba(20, 35, 40, 0.4) 0%, rgba(10, 20, 25, 0.7) 100%),
+        url('images/Obsidian/4k-forest-7sfd6znw2ry6hnlt.jpg');
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 50px 0 0 0; 
+    color: #e0e0e0; 
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* 核心容器：白色的卡片 */
+.container {
+    background-color: #ffffff; /* 纯白背景 */
+    padding: 40px;
+    border-radius: 12px; /* 圆角稍微大一点，更现代 */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* 很淡的阴影，显精致 */
+    width: 90%;
+    max-width: 800px; 
+    margin-bottom: 50px;
+}
+
+/* 标题样式 */
+h1 {
+    color: #2c3e50;
+    margin-top: 0;
+    border-bottom: 2px solid #f0f0f0; /* 线条颜色淡一点 */
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+h4 {
+    color: #555;
+    margin: 0;
+}
+
+/* 链接样式 */
+a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+a:hover {
+    text-decoration: underline;
+    color: #2980b9;
+}
+
+/* 输入框样式 */
+input[type="text"],
+input[type="password"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 20px 0;
+    display: inline-block;
+    border: 1px solid #ddd; /* 边框淡一点 */
+    border-radius: 6px;
+    box-sizing: border-box; 
+    font-size: 14px;
+    background-color: #fafafa; /* 输入框稍微带点底色 */
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #3498db; /* 聚焦时变蓝 */
+    outline: none;
+    background-color: #fff;
+}
+
+/* 主按钮样式 (绿色) */
+button {
+    width: 100%;
+    background-color: #cc952e; /* 更鲜艳一点的绿色 */
+    color: white;
+    padding: 12px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: separate; /* 为了圆角 */
+    border-spacing: 0;
+    margin-top: 20px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden; /* 藏住表格角的溢出 */
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #666;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+
+
+/* 用户信息栏 */
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+
+/* CSS */
+
+/* 给整个时间区域一个背景，像一个卡片一样 */
+.time-inputs-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8f9fa; /* 浅灰色背景 */
+    padding: 15px;
+    border-radius: 12px; /* 圆角 */
+    border: 1px solid #e9ecef;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.time-field {
+    display: flex;
+    flex-direction: column; /* Label 在输入框上面，更紧凑 */
+    width: 45%; /* 两个输入框各占不到一半 */
+}
+
+.time-field label {
+    font-size: 12px;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* 核心：美化原生的 time input */
+input[type="time"] {
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; /* 统一字体 */
+    font-size: 14px;
+    color: #495057;
+    background-color: white;
+    outline: none;
+    transition: all 0.2s ease;
+    
+    /* 这一行很重要：让它在 iOS 上也看起来像个正常的盒子，而不是圆圆的默认样式 */
+    -webkit-appearance: none; 
+}
+
+/* 聚焦时的效果，给一点绿色的光晕，呼应你的按钮 */
+input[type="time"]:focus {
+    border-color: #2ecc71; /* 你的绿色主题色 */
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+}
+
+/* 中间的箭头 */
+.time-separator {
+    color: #adb5bd;
+    font-weight: bold;
+    margin-top: 15px; /* 为了和输入框对齐，因为label占了高度 */
+}
+
+
+
+
+
+/* Body 保持不变，不用动 */
+body {
+    
+}
+
+/* --- 这里开始修改 --- */
+
+.glass-container {
+    /* 1. 必须加上这两行定位属性 */
+    position: relative; 
+    overflow: hidden;   /* 防止雨水超出圆角边框 */
+
+    /* 2. 原有样式保持不变 */
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* 注意：你原文写成了 drop-filter，我帮你修正为 backdrop-filter 了 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    padding: 20px;
+    color: white;
+}
+
+.transp-textbox {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.transp-container { /*transp for transparent*/
+    position: relative;
+    background: rgba(255, 255, 255, 0);
+    border-radius: 6px;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.mild-white { 
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 900;
+}
+
+.transp-container input[type="text"] {
+    background: rgba(255, 255, 255, 0); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white; 
+    border-radius: 8px;
+    color-scheme: dark;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+
+/* --- 新增以下部分 --- */
+
+/* 3. 雨水画布的样式 */
+#rain-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* 关键：让鼠标能穿透雨水点击输入框 */
+    z-index: 0; 
+}
+
+/* 4. 确保卡片里的内容（文字、输入框）浮在雨水上面 */
+/* 这里使用了通用选择器，意思是：glass-container里除了canvas以外的所有元素 */
+.glass-container > *:not(canvas) {
+    position: relative;
+    z-index: 1;
+}
+
+/* 针对 glass-container 里的输入框进行特殊处理 */
+.glass-container input[type="text"],
+.glass-container input[type="time"] {
+    /* 核心：背景改为半透明白色 */
+    background: rgba(255, 255, 255, 0.15); 
+    
+    /* 边框也弄淡一点 */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    /* 输入的文字要是白色的，不然看不清 */
+    color: white; 
+    
+    /* 去掉默认的圆角可能会更硬朗一点，或者保持你原来的圆角 */
+    border-radius: 8px;
+
+    color-scheme: dark;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+/* 鼠标点进去（聚焦）的时候，稍微亮一点，提示用户 */
+.glass-container input:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.8);
+    outline: none;
+}
+
+/* 这是一个容易被忽略的细节：把 placeholder (如果有的话) 也改成浅白色 */
+.glass-container input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.green-button {
+    /* 使用渐变色，从深绿到青色，更有质感 */
+    background: linear-gradient(135deg, #5e9b96 0%, #55cc83 100%);
+    
+    /* 加一点阴影让它浮起来 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: none;
+    font-weight: bold;
+    letter-spacing: 1px; /* 字母间距拉开一点点显高级 */
+    
+}
+.green-button:hover{
+    transform: scale(0.99); /* 缩小到原尺寸的 95% */
+}
+.green-button {
+    transition: transform 0.1s ease; /* 0.1秒平滑过渡 */
+}
+
+
+
+/* --- Glass Table Styles --- */
+
+/* 表格整体容器 */
+.glass-table {
+    width: 100%;
+    border-collapse: collapse; /* 关键：合并边框，实现单线网格效果 */
+    background-color: rgba(255, 255, 255, 0.02); /* 极淡的背景，接近全透明 */
+    backdrop-filter: blur(5px); /* 磨砂效果，提升文字可读性 */
+    border-radius: 8px; /* 圆角 */
+    overflow: hidden; /* 保证圆角不被内部内容溢出遮挡 */
+    color: #ffffff; /* 全局白色文字 */
+    font-size: 0.95rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 轻微阴影增加层次感 */
+}
+
+/* 表头样式 */
+.glass-table thead tr {
+    background-color: rgb(255, 255, 255, 0.1); /* 表头稍微亮一点，区分内容 */
+}
+
+.glass-table th {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0);
+}
+
+/* 单元格通用样式 (表头和内容) - 实现行列分割线 */
+.glass-table th, 
+.glass-table td {
+    padding: 14px 16px;
+    text-align: left;
+    /* 这里定义分割线：半透明白色 */
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+    font-weight: normal;
+    text-align: center;
+}
+
+/* 内容行悬停效果 */
+.glass-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.08); /* 鼠标放上去微微发光 */
+    transition: background-color 0.2s ease;
+}
+
+/* 空状态文字样式 */
+.glass-empty-text {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 30px !important;
+    font-style: italic;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: normal;
+}
+
+/* --- Delete Button Styles --- */
+
+button.btn-delete-ghost {
+    background-color: rgba(255, 255, 255, 0);      /* 透明背景 */
+    border: 1px solid rgba(231, 76, 60, 0.5); /* 细红线边框 */
+    color: #ffffff;               /* 白色文字 */
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    font-weight: normal;
+}
+
+button.btn-delete-ghost:hover {
+    background-color: rgba(231, 102, 87, 0.1); /* 悬停时背景变红一点点 */
+    border-color: rgba(218, 165, 32, 0.8);
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.2); /* 红色辉光 */
+}
+
+/* QuickNote, NoteBook, End-day Button*/
+
+/* --- New Additions for Sidebar & Footer Consistency --- */
+
+/* 1. 复用左侧的 Header 样式，用于右侧卡片标题 */
+.glass-header-title {
+    margin: 0;
+    font-size: 1.2rem; /* 匹配左侧 h1 大小 */
+    color: rgba(255, 255, 255, 0.85); /* 匹配左侧文字颜色 */
+    font-weight: normal; /* 匹配左侧 font-weight: normal */
+    letter-spacing: 0.5px;
+}
+
+/* 右侧卡片右上角的小状态文字 */
+.glass-header-status {
+    font-size: 0.85em;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+}
+
+/* 2. 透明文本域样式 (匹配左侧 Input) */
+.glass-textarea {
+    width: 100%;
+    flex: 1; /* 让它填满剩余空间 */
+    background: transparent;
+    border: none;
+    resize: none;
+    outline: none;
+    
+    /* 字体样式匹配左侧输入框 */
+    font-family: inherit;
+    font-size: 1rem; 
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 15px;
+}
+
+.glass-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* 3. 红色按钮样式 (结构与 .green-button 保持一致) */
+.red-button {
+    /* 渐变色：从深红到浅红，呼应左侧绿色按钮 */
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+    border: none;
+    padding: 12px 35px;
+    border-radius: 6px; /* 统一圆角：原来是30px(胶囊)，现在改为6px以匹配左侧风格 */
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    letter-spacing: 1px;
+}
+
+.red-button:hover {
+    background: linear-gradient(135deg, #ffe6e3 0%, #ff9a8f 50%, #ffe6e3 100%);
+    box-shadow: 0 6px 20px rgba(192, 57, 43, 0.4);
+}

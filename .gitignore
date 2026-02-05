@@ -4,3 +4,4 @@ __pycache__/
 *.db
 *.pyc
 reset_db.py
+index-issues.txt

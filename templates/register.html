@@ -3,13 +3,14 @@
     <head>
         <title>Register</title>
         <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='shake.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='register_body.css')}}">
     </head>
     <body>
         
-        <div class="container" style="max-width: 400px; margin-top: 100px;">
+        <div class="container glass-container" style="max-width: 400px; margin-top: 100px;">
             
-            <h1 style="text-align: center;">Create Account</h1>
-            
+            <h1 style="text-align: center; color: whitesmoke">Create Account</h1>
             <form action="/register" method="POST">
                 <label>Username:</label>
                 <input type="text" name="username" required>
@@ -17,8 +18,19 @@
                 <label>Password:</label>
                 <input type="password" name="password" required>
 
+                <label>Please confirm your password:</label>
+                <input type="password" name="password-confirm" required>
+
                 <button type="submit">Sign Up</button>
             </form>
+
+            {% if user_exists %}
+            <p style="text-align: center;" class="shake-error">Username already exists. </p>
+            <hr>
+            {% elif password_mismatch %}
+            <p style="text-align: center" class="shake-error">Passwords do not match.</p>
+            <hr>
+            {% endif %}
 
             <p style="text-align: center; margin-top: 20px;">
                 Already have an account? <a href="/login">Login</a>

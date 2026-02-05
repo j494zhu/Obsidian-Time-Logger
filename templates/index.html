@@ -1,176 +1,199 @@
-{% extends 'base.html' %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsidian Logger</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index_body.css')}}">
 
-{% block content %}
+    <script src="{{ url_for('static', filename='scripts/rain.js') }}"></script>
+</head>
+<body>
+    
+    <div >
+        <div class="header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="color: rgba(255, 255, 255, 0.808); font-weight: normal">
+                {% if readonly %}
+                    <span style="color: #2ecc71;">User: {{ display_user.username }} (Read Only)</span>
+                {% else %}
+                    {{ current_user.username }}'s Log
+                {% endif %}
+            </h2>
 
-<div class="header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-    <h2>
-        {% if readonly %}
-            <span style="color: #2ecc71;">User: {{ display_user.username }} (Read Only)</span>
-        {% else %}
-            {{ current_user.username }}'s Log
-        {% endif %}
-    </h2>
+            <div>
+                {% if not readonly %}
+                    <a href="/history" style="text-decoration: none; color: #ffc011e5; font-weight: 600;">View History</a>
+                    <span style="margin: 0 15px; color: #ccc; border-left: 1px solid #ccc; height: 1em; display: inline-block; vertical-align: middle;"></span>
+                    <a href="/logout" style="color: #e74c3c; text-decoration: none; font-weight: 600;">Logout</a>
+                {% elif current_user.is_authenticated %}
+                    <a href="/logout" style="color: #e74c3c; text-decoration: none;">Logout</a>
+                {% endif %}
+            </div>
+        </div>
 
-    <div>
-        {% if not readonly %}
-            <a href="/history" style="text-decoration: none; color: #ffe494f8; font-weight: 600;">View History</a>
-            <span style="margin: 0 15px; color: #ccc; border-left: 1px solid #ccc; height: 1em; display: inline-block; vertical-align: middle;"></span>
-            <a href="/logout" style="color: #e74c3c; text-decoration: none; font-weight: 600;">Logout</a>
-        {% elif current_user.is_authenticated %}
-            <a href="/logout" style="color: #e74c3c; text-decoration: none;">Logout</a>
-        {% endif %}
-    </div>
-</div>
+        <div class="main-layout" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; align-items: start;">
 
-<div class="main-layout" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; align-items: start;">
+            <div class="journal-section">
+                
+                {% if not readonly %}
+                    <div class="glass-container mild-white" style="padding: 10px; margin-bottom: 15px">
+                        <!--
+                        <canvas id="rain-canvas"></canvas>
+                        -->
+                        
+                        <h1 style="border-color: rgba(255, 255, 255, 0.575); margin-top: 0; font-size: 1.2rem; color: #ffffffd5; margin-bottom: 18px; text-align: center;">Update your timeline</h1>
+                        <div class="form-container">
+                            <form action='/' method='POST'>
+                                <label style="font-weight: normal; display: block; margin-bottom: 5px;">Description:</label>
 
-    <div class="journal-section">
-        
-        {% if not readonly %}
-            <div style="background: rgba(183, 251, 151, 0.889); padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px;">
-                <h1 style="margin-top: 0; font-size: 1.2rem; color: #444;">Update your timeline</h1>
-                <div class="form-container">
-                    <form action='/' method='POST'>
-                        <label style="font-weight: bold; display: block; margin-bottom: 5px;">Description:</label>
-                        <input type="text" name="desc" placeholder="What did you do?" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px;">
-                        <div class="time-inputs-wrapper">
-                            <div class="time-field">
-                                <label for="start_time">From</label>
-                                <input type="time" id="start_time" name="start_time" required>
-                            </div>
-                            <span class="time-separator">→</span>
-                            <div class="time-field">
-                                <label for="end_time">To</label>
-                                <input type="time" id="end_time" name="end_time" required>
-                            </div>
+                                <input type="text" name="desc" placeholder="What did you do?" required style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; background-color: rgba(255, 255, 255, 0); border-color: rgba(255, 255, 255, 0.5)">
+                                
+                                
+                                <label style="font-weight: normal; display: block; margin-bottom: 5px; margin-top: 20px">Duration:</label>
+                                <div class="time-inputs-wrapper transp-container">
+                                    <div class="time-field">
+                                        <label for="start_time" style="color: whitesmoke; font-weight: 200">From</label>
+                                        <input type="time" id="start_time" name="start_time" required>
+                                    </div>
+                                    
+                                    <span class="time-separator">→</span>
+                                    <div class="time-field">
+                                        <label for="end_time" style="color: whitesmoke; font-weight: 200">To</label>
+                                        <input type="time" id="end_time" name="end_time" required>
+                                    </div>
+                                </div>
+                                <button class="green-button" type="submit" style="margin-top: 15px; width: 100%; padding: 10px; background-color: #48a95aee; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem;">Add Item</button>
+                            </form>
                         </div>
-                        <button type="submit" style="margin-top: 15px; width: 100%; padding: 10px; background-color: #48a95aee; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem;">Add Item</button>
-                    </form>
+                    </div>
+                {% endif %}
+
+                <div class="glass-container mild-white" style="padding: 10px; margin-bottom: 15px">
+                    <h1 style="border-color: rgba(255, 255, 255, 0.575); margin-top: 0; font-size: 1.2rem; color: #ffffffd5; margin-bottom: 18px; text-align: center;">History Flow</h1>
+                        
+                    <table class="glass-table">
+                        <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th width="50%">Description</th>
+                                <th width="15%">Start</th>
+                                <th width="15%">End</th>
+                                {% if not readonly %}
+                                <th width="15%">Oper</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in expenses %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ item.desc }}</td>
+                                <td>{{ item.start_time }}</td> 
+                                <td>{{ item.end_time }}</td> 
+                                {% if not readonly %}
+                                <td>
+                                    <form action="/delete/{{ item.id }}" method="POST" style="margin:0;">
+                                        <button type="submit" class="btn-delete-ghost">Delete</button>
+                                    </form>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                            
+                            {% if expenses|length == 0 %}
+                            <tr>
+                                <td colspan="5" class="glass-empty-text">
+                                    No records for today yet.
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+                {% if not readonly %}
+                    {% if not readonly %}
+                    <div class="end-day-section" style="margin-top: 40px; margin-bottom: 60px; text-align: center; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 20px;">
+                        <p style="color: rgba(255,255,255,0.5); font-size: 0.9em; margin-bottom: 15px;">Ready to wrap up for the day?</p>
+                        <form action="/end_day" method="POST" onsubmit="return confirm('End Day? Quick Notes will be cleared.');">
+                            <button type="submit" class="red-button">End Day & Archive</button>
+                        </form>
+                    </div>
+                {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="notes-sidebar" style="position: sticky; top: 20px; display: flex; flex-direction: column; gap: 20px; height: calc(100vh - 40px);">
+                
+                <div class="glass-container" style="flex: 1; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <h4 class="glass-header-title">⚡ Quick Note</h4>
+                        <span id="status-quick" class="glass-header-status">Daily Cleared</span>
+                    </div>
+                    <textarea id="quick_note_area" class="glass-textarea" {% if readonly %}disabled{% endif %} 
+                        placeholder="Write things to clear today...">{{ current_user.quick_note if current_user.is_authenticated else '' }}</textarea>
+                </div>
+
+                <div class="glass-container" style="flex: 1; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <h4 class="glass-header-title"># NoteBook</h4>
+                        <span id="status-book" class="glass-header-status">Permanent</span>
+                    </div>
+                    <textarea id="notebook_area" class="glass-textarea" {% if readonly %}disabled{% endif %}
+                        placeholder="Keep ideas here forever...">{{ current_user.notebook if current_user.is_authenticated else '' }}</textarea>
                 </div>
             </div>
-        {% endif %}
-
-        <div style="background: rgba(183, 251, 151, 0.889); padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 30px;">
-            <h3 style="margin-top: 20px; color: #333;">History Flow</h3>
-            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-                <thead style="background-color: #f8f9fa;">
-                    <tr>
-                        <th width="5%" style="padding: 12px; text-align: left; border-bottom: 2px solid #eee;">#</th>
-                        <th width="50%" style="padding: 12px; text-align: left; border-bottom: 2px solid #eee;">Desc</th>
-                        <th width="15%" style="padding: 12px; text-align: left; border-bottom: 2px solid #eee;">Start</th>
-                        <th width="15%" style="padding: 12px; text-align: left; border-bottom: 2px solid #eee;">End</th>
-                        {% if not readonly %}<th width="15%" style="padding: 12px; text-align: left; border-bottom: 2px solid #eee;">Oper</th>{% endif %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in expenses %}
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 12px;">{{ loop.index }}</td>
-                        <td style="padding: 12px;">{{ item.desc }}</td>
-                        <td style="padding: 12px;">{{ item.start_time }}</td> 
-                        <td style="padding: 12px;">{{ item.end_time }}</td> 
-                        {% if not readonly %}
-                        <td style="padding: 12px;">
-                            <form action="/delete/{{ item.id }}" method="POST" style="margin:0;">
-                                <button type="submit" class="delete-btn" style="color:#e74c3c; border:none; background:none; cursor:pointer; font-weight: bold;">Delete</button>
-                            </form>
-                        </td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                    {% if expenses|length == 0 %}
-                    <tr><td colspan="5" style="padding: 20px; text-align: center; color: #999;">No records for today yet.</td></tr>
-                    {% endif %}
-                </tbody>
-            </table>
+        </div>
         </div>
 
-        {% if not readonly %}
-            <div class="end-day-section" style="margin-top: 40px; margin-bottom: 60px; text-align: center; border-top: 2px dashed #eee; padding-top: 20px;">
-                <p style="color: #888; font-size: 0.9em;">Ready to wrap up for the day?</p>
-                <form action="/end_day" method="POST" onsubmit="return confirm('End Day? Quick Notes will be cleared.');">
-                    <button type="submit" style="background-color: #ff6b6b; color: white; border: none; padding: 12px 35px; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 4px 6px rgba(255, 107, 107, 0.3);">🌙 End Day & Archive</button>
-                </form>
-            </div>
-        {% endif %}
-    </div>
+    {% if not readonly %}
+    <script>
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
 
-    <div class="notes-sidebar" style="position: sticky; top: 20px; display: flex; flex-direction: column; gap: 20px; height: calc(100vh - 40px);">
-        
-        <div class="note-card" style="background: #fff3cd; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex: 1; display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <h4 style="margin: 0; color: #856404;">⚡ Quick Note</h4>
-                <span id="status-quick" style="font-size: 0.8em; color: #856404; opacity: 0.6;">Daily Cleared</span>
-            </div>
-            <textarea id="quick_note_area" {% if readonly %}disabled{% endif %} 
-                style="width: 100%; flex: 1; border: none; background: transparent; resize: none; outline: none; font-family: inherit; line-height: 1.5;"
-                placeholder="Write things to clear today...">{{ current_user.quick_note if current_user.is_authenticated else '' }}</textarea>
-        </div>
+        function saveNote(type, content, statusId) {
+            const statusSpan = document.getElementById(statusId);
+            statusSpan.innerText = "Saving...";
+            
+            fetch('/save_notes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ type: type, content: content }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                statusSpan.innerText = "Saved at " + data.saved_at;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                statusSpan.innerText = "Error!";
+            });
+        }
 
-        <div class="note-card" style="background: #d1ecf1; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); flex: 1; display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <h4 style="margin: 0; color: #0c5460;"># NoteBook</h4>
-                <span id="status-book" style="font-size: 0.8em; color: #0c5460; opacity: 0.6;">Permanent</span>
-            </div>
-            <textarea id="notebook_area" {% if readonly %}disabled{% endif %}
-                style="width: 100%; flex: 1; border: none; background: transparent; resize: none; outline: none; font-family: inherit; line-height: 1.5;"
-                placeholder="Keep ideas here forever...">{{ current_user.notebook if current_user.is_authenticated else '' }}</textarea>
-        </div>
+        const quickInput = document.getElementById('quick_note_area');
+        const bookInput = document.getElementById('notebook_area');
 
-    </div>
+        if(quickInput) {
+            quickInput.addEventListener('input', debounce(function() {
+                saveNote('quick_note', this.value, 'status-quick');
+            }, 1000));
+        }
 
-</div>
+        if(bookInput) {
+            bookInput.addEventListener('input', debounce(function() {
+                saveNote('notebook', this.value, 'status-book');
+            }, 1000));
+        }
+    </script>
+    {% endif %}
 
-{% if not readonly %}
-<script>
-    // 定义一个简单的防抖函数 (Debounce)，防止每打一个字都发请求
-    function debounce(func, wait) {
-        let timeout;
-        return function(...args) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
-    }
-
-    // 保存函数
-    function saveNote(type, content, statusId) {
-        const statusSpan = document.getElementById(statusId);
-        statusSpan.innerText = "Saving...";
-        
-        fetch('/save_notes', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ type: type, content: content }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            // 这里用到了后端返回的 saved_at
-            statusSpan.innerText = "Saved at " + data.saved_at;
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            statusSpan.innerText = "Error!";
-        });
-    }
-
-    // 绑定事件：用户停止打字 1 秒后触发保存
-    const quickInput = document.getElementById('quick_note_area');
-    const bookInput = document.getElementById('notebook_area');
-
-    if(quickInput) {
-        quickInput.addEventListener('input', debounce(function() {
-            saveNote('quick_note', this.value, 'status-quick');
-        }, 1000)); // 1000毫秒 = 1秒
-    }
-
-    if(bookInput) {
-        bookInput.addEventListener('input', debounce(function() {
-            saveNote('notebook', this.value, 'status-book');
-        }, 1000));
-    }
-</script>
-{% endif %}
-
-{% endblock %}
+</body>
+</html>

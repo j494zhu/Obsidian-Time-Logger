@@ -186,9 +186,12 @@ def register():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
+        password_2 = request.form.get('password-confirm')
         user = User.query.filter_by(username=username).first()
         if user:
-            return render_template('register_failed.html')
+            return render_template('register.html', user_exists=True)
+        if password != password_2:
+            return render_template('register.html', password_mismatch=True)
         # Hash password
         new_user = User(username=username, password=generate_password_hash(password, method='pbkdf2:sha256'))
         db.session.add(new_user)
@@ -212,10 +215,10 @@ def login():
 
         # username exists but password is incorrect:
         if user:
-            return render_template('login.html', wrong_password=True)
+            return render_template('login.html', wrong_password=True, user_dne=False)
 
         # username does not exist
-        return render_template('login.html', user_dne=True)
+        return render_template('login.html', user_dne=True, wrong_password=False)
     else:
         return render_template('login.html')
 
