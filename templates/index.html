@@ -23,11 +23,11 @@
 
             <div>
                 {% if not readonly %}
-                    <a href="/history" style="text-decoration: none; color: #ffc011e5; font-weight: 600;">View History</a>
+                    <a href="/history" class="history-link">View History</a>
                     <span style="margin: 0 15px; color: #ccc; border-left: 1px solid #ccc; height: 1em; display: inline-block; vertical-align: middle;"></span>
-                    <a href="/logout" style="color: #e74c3c; text-decoration: none; font-weight: 600;">Logout</a>
+                    <a href="/logout" class="logout-link">Logout</a>
                 {% elif current_user.is_authenticated %}
-                    <a href="/logout" style="color: #e74c3c; text-decoration: none;">Logout</a>
+                    <a href="/logout" class="logout-link">Logout</a>
                 {% endif %}
             </div>
         </div>

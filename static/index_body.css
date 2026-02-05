@@ -393,7 +393,7 @@ button.btn-delete-ghost:hover {
     margin: 0;
     font-size: 1.2rem; /* 匹配左侧 h1 大小 */
     color: rgba(255, 255, 255, 0.85); /* 匹配左侧文字颜色 */
-    font-weight: normal; /* 匹配左侧 font-weight: normal */
+    font-weight: lighter; /* 匹配左侧 font-weight: normal */
     letter-spacing: 0.5px;
 }
 
@@ -401,7 +401,7 @@ button.btn-delete-ghost:hover {
 .glass-header-status {
     font-size: 0.85em;
     color: rgba(255, 255, 255, 0.5);
-    font-weight: 300;
+    font-weight: lighter;
 }
 
 /* 2. 透明文本域样式 (匹配左侧 Input) */
@@ -499,5 +499,20 @@ button.btn-delete-ghost:hover {
     color: rgba(255, 255, 255, 0.75);
     margin-bottom: 18px; 
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.logout-link {
+    color: #dbaea9;
+}
+.logout-link:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.history-link {
+    color: rgb(187, 180, 141);
+}
+.history-link:hover {
+    color: rgba(255, 255, 255, 0.8);
 }
