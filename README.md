@@ -5,6 +5,14 @@ A modern, high-performance productivity dashboard designed for granular activity
 [**🔗 View Live Demo on DigitalOcean**](https://obsidian-logger-djozf.ondigitalocean.app/)
 
 ---
+## 📸 Application Preview
+
+<p align="center">
+  <img src="image_2026-02-07_15-24-12.png" alt="Obsidian Logger Preview 1" width="800">
+  <br>
+  <img src="image_2026-02-07_15-27-46.png" alt="Obsidian Logger Preview 2" width="800">
+</p>
+
 
 ## 🌟 Key Features
 
