@@ -6,8 +6,10 @@
     <title>Obsidian Logger</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='index_body.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='hud_style.css')}}">
 
     <script src="{{ url_for('static', filename='scripts/rain.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/hud_logic.js') }}"></script>
 </head>
 <body>
     
@@ -122,6 +124,59 @@
                     </div>
                 {% endif %}
                 {% endif %}
+            </div>
+
+            <div class="notes-sidebar">
+                
+                <div class="glass-container ai-hud-module" style="display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <h4 class="glass-header-title">
+                            <span id="hud-status-dot" class="status-dot"></span>
+                            Neural Audit
+                        </h4>
+                        <span id="hud-status-text" class="glass-header-status">Standby</span>
+                    </div>
+
+                    <div id="hud-content" class="hud-content-area">
+                        <div style="text-align: center;">
+                            <span id="hud-score-val" class="hud-score">--</span>
+                            <div class="hud-score-label">Productivity Score</div>
+                        </div>
+                        
+                        <div id="hud-insight-text" class="hud-insight">
+                            System Ready. Awaiting data uplink...
+                        </div>
+                        
+                        <div id="hud-warning-box" class="hud-warning" style="display:none;">
+                            ⚠ <span id="hud-warn-text"></span>
+                        </div>
+                    </div>
+
+                    <button id="audit-btn" class="hud-btn" onclick="runNeuralAudit()">
+                        Initialize Scan
+                    </button>
+                </div>
+
+
+                <div class="glass-container" style="flex: 1; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <h4 class="glass-header-title"># Quick Note</h4>
+                        <span id="status-quick" class="glass-header-status">Daily Cleared</span>
+                    </div>
+                    <textarea id="quick_note_area" class="glass-textarea" {% if readonly %}disabled{% endif %} 
+                        placeholder="Write things to clear today...">{{ current_user.quick_note if current_user.is_authenticated else '' }}</textarea>
+                </div>
+
+
+                <div class="glass-container" style="flex: 1; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                        <h4 class="glass-header-title"># NoteBook</h4>
+                        <span id="status-book" class="glass-header-status">Permanent</span>
+                    </div>
+                    <textarea id="notebook_area" class="glass-textarea" {% if readonly %}disabled{% endif %}
+                        placeholder="Keep ideas here forever...">{{ current_user.notebook if current_user.is_authenticated else '' }}</textarea>
+                </div>
+
             </div>
 
             <div class="notes-sidebar">

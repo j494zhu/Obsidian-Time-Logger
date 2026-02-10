@@ -1,4 +1,8 @@
 import os
+import json
+import google.generativeai as genai
+
+
 from flask import Flask, render_template, request, redirect, session, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user, login_required
@@ -9,6 +13,8 @@ from routes.login_return import login_bp
 
 app = Flask(__name__)
 app.secret_key = "dlB93f60saldD0"
+
+genai.configure(api_key="AIzaSyDSCeceBE_HiC6YY1nS1g8IZEU55rCQvrY")
 
 database_url = os.environ.get('DATABASE_URL')
 if database_url and database_url.startswith("postgres://"):
@@ -259,5 +265,83 @@ def save_notes():
     db.session.commit()
     return jsonify({"status": "success", "saved_at": datetime.now().strftime("%H:%M:%S")})
 
+
+
+@app.route('/api/ai/audit', methods=['POST'])
+@login_required
+def ai_audit():
+    last_run = session.get('last_audit_time')
+    now = datetime.now()
+    
+    if last_run:
+        # 把字符串转回 datetime 对象 (session存储的是字符串)
+        last_time = datetime.fromisoformat(last_run)
+        if now - last_time < timedelta(seconds=10):
+            return jsonify({
+                "score": 0,
+                "status": "red",
+                "insight": "Cool down! System recharging.",
+                "warning": "Rate limit exceeded. Wait 10s."
+            }), 429
+
+    # 更新最后请求时间
+    session['last_audit_time'] = now.isoformat()
+    
+    # 1. 收集数据：今天的 Log 和 你的 Notebook
+    logical_date = get_logical_date(datetime.now())
+    today_logs = Expenses.query.filter_by(user_id=current_user.id, archive_date=logical_date).all()
+    active_items = Expenses.query.filter_by(user_id=current_user.id, is_archived=False).all()
+    
+    logs_data = []
+    # 合并已归档和未归档的记录
+    for log in today_logs + active_items:
+        logs_data.append(f"{log.start_time}-{log.end_time}: {log.desc}")
+    
+    user_goals = current_user.notebook
+
+    # 2. 呼叫 AI (工业化 Prompt)
+    # 告诉它：你是审核员，只许回 JSON，不许废话
+    prompt = f"""
+    Role: Strict Productivity Auditor.
+    
+    [USER DATA]
+    Goals: {user_goals}
+    Logs: {logs_data}
+    
+    [TASK]
+    Analyze alignment. Return ONLY valid JSON:
+    {{
+        "score": (0-100 int),
+        "status": ("green"/"yellow"/"red"),
+        "insight": (max 15 words, sharp comment),
+        "warning": (health/habit warning or "None")
+    }}
+    """
+
+    try:
+        # 使用你刚配置好的 gemini-2.5-flash
+        model = genai.GenerativeModel('gemini-2.5-flash')
+        response = model.generate_content(prompt)
+        
+        # [关键步骤] 清洗数据：去掉可能存在的 Markdown 标记
+        clean_json = response.text.replace("```json", "").replace("```", "").strip()
+        
+        return jsonify(json.loads(clean_json))
+
+    except Exception as e:
+        print(f"AI Error: {e}") # 在终端打印错误，方便你看
+        return jsonify({
+            "score": 0, 
+            "status": "red", 
+            "insight": "AI Connection Failed", 
+            "warning": str(e)
+        })
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+#  git checkout -b ai-integration

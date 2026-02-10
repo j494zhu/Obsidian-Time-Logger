@@ -1,0 +1,113 @@
+/* ========================================== */
+/* MODULE: NEURAL AUDIT HUD                   */
+/* 依赖: index_body.css (glass-container)     */
+/* ========================================== */
+
+:root {
+    --neon-green: #00ff41;
+    --neon-yellow: #ffcc00;
+    --neon-red: #ff3333;
+}
+
+/* 微调 HUD 容器，使其在通用的 glass-container 基础上更像仪表盘 */
+.ai-hud-module {
+    /* 稍微加深一点背景，突出它是控制中心 */
+    background: rgba(20, 20, 20, 0.3) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px; /* 和下方的 Quick Note 隔开 */
+    transition: all 0.3s ease;
+}
+
+/* 呼吸灯动画 */
+.status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background-color: var(--neon-green);
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 8px var(--neon-green);
+    animation: blink 3s infinite;
+}
+@keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.4;} }
+
+/* 触发按钮 - 继承并修改你的 green-button */
+.hud-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px;
+    margin-top: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.hud-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+.hud-btn:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+/* 结果显示区域 (默认隐藏) */
+.hud-content-area {
+    display: none; /* JS 控制显示 */
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+    animation: slideDown 0.4s ease-out;
+}
+@keyframes slideDown { from {opacity: 0; transform: translateY(-10px);} to {opacity: 1; transform: translateY(0);} }
+
+/* 分数大字 */
+.hud-score {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.hud-score-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+/* AI 评语 */
+.hud-insight {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    line-height: 1.4;
+    font-style: italic;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 警告信息 */
+.hud-warning {
+    margin-top: 8px;
+    color: var(--neon-red);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+}
