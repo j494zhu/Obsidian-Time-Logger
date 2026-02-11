@@ -12,29 +12,20 @@
     <script src="{{ url_for('static', filename='scripts/hud_logic.js') }}"></script>
 </head>
 <body>
-    <div >
+    <div>
         <div class="header-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h2 style="color: rgba(255, 255, 255, 0.808); font-weight: normal">
-                {% if readonly %}
-                    <span style="color: #2ecc71;">User: {{ display_user.username }} (Read Only)</span>
-                {% else %}
-                    {{ current_user.username }}'s Log
-                {% endif %}
+                {{ current_user.username }}'s Log
             </h2>
 
             <div>
-                {% if not readonly %}
-                    <a href="/history" class="history-link">View History</a>
-                    <span style="margin: 0 15px; color: #ccc; border-left: 1px solid #ccc; height: 1em; display: inline-block; vertical-align: middle;"></span>
-                    <a href="/logout" class="logout-link">Logout</a>
-                {% elif current_user.is_authenticated %}
-                    <a href="/logout" class="logout-link">Logout</a>
-                {% endif %}
+                <a href="/history" class="history-link">View History</a>
+                <span style="margin: 0 15px; color: #ccc; border-left: 1px solid #ccc; height: 1em; display: inline-block; vertical-align: middle;"></span>
+                <a href="/logout" class="logout-link">Logout</a>
             </div>
         </div>
 
-        <div class="main-layout" style="display: grid; grid-template-columns: 1.8fr 1fr 0.8fr; gap: 25px; align-items: start;">
-            
+        <div class="main-layout" style="display: grid; grid-template-columns: 1.8fr 1fr 0.8fr; gap: 25px; align-items: start;">  
             <div class="col-left">
                 <div class="glass-container mild-white" style="padding: 10px; margin-bottom: 25px">
                     <h1 class="section-title">Update Timeline</h1>
@@ -107,7 +98,6 @@
                 </div>
             </div>
 
-
             <div class="col-center" style="display: flex; flex-direction: column; gap: 25px;">
                 <div class="glass-container" style="display: flex; flex-direction: column; min-height: 250px;">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
@@ -127,7 +117,6 @@
                         placeholder="Long-term storage...">{{ current_user.notebook }}</textarea>
                 </div>
             </div>
-
 
             <div class="col-right" style="position: sticky; top: 20px;">
                 
@@ -203,7 +192,6 @@
                 </div>
 
             </div>
-
         </div>
 
     </div>
