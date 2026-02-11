@@ -1,4 +1,4 @@
-1. [half resolved] 当密码不正确的时候, 不要直接进入一个Invalid username or password. Please try again.
+1. [resolved] 当密码不正确的时候, 不要直接进入一个Invalid username or password. Please try again.
 的提示页, 最好就要在刚刚的登陆界面, 清空密码然后跳出一个半透明的弹窗, 提示密码错误
 然后可以加上一些动画上面的, 比如把原来的绿色登录按钮短暂地变成红色
 (或者直接在登录按钮上显示信息就可以了, 加上一个抖动的效果, 过2秒钟以后再变回来)
@@ -7,7 +7,7 @@
 
 3. [unresolved] 晚点买一个域名挂上去, 虽然现在的样子勉强也可以接受
 
-4. [unresolved] 统一一下语言; 不要中文英文混用; 最好的话就是设计一份选择项; 默认英文
+4. [resolved] 统一一下语言; 不要中文英文混用; 最好的话就是设计一份选择项; 默认英文
 
 5. [resolved] 更新一下主界面ui, 现在的开始时间和结束时间这两行实在是太丑了;
 
@@ -31,7 +31,7 @@
 
 14. [unresolved] 右侧添加一个计时器
 
-15. [unresolved] change login and register ui!!
+15. [resolved] change login and register ui!!
 
 16. [cancelled] 添加更加炫酷的渐变动画
 
@@ -67,3 +67,11 @@
 35. [unresolved] neural audit 自动生成报告：自动总结每日时间分布，deepwork比例，分析次数
 36. [unresolved] 给neural audit添加上“选择分析模式”来让项目变得更加高级（从上面角度进行分析？切换不同的分析思路）
 
+[]. [好的，我现在清楚了
+logged应该是比较好弄的；deepwork按照关键词的筛法，勉强行得通，但并不是一个非常靠谱的方案。
+不过如果只是拿来水一下项目的话应该也是足够了，一开始我是想直接调用gemini api来判断一段工作是是否属于deepwork的；
+streak的话，我暂时感觉应该还是可以解决的？ 我想在user class定义一个streak以及date； 
+比如第一次登陆，streak是0，date就是当天日期；第二天登陆，先检查和上次登陆是不是仅仅过了一天；
+如果不是的话，streak清零，否则streak+1；system确实纯粹是为了耍帅，总之就按照on/rec/focus 这样子就可以了！]
+
+[]. []

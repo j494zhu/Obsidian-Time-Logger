@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='hud_style.css')}}">
 
     <script src="{{ url_for('static', filename='scripts/rain.js') }}"></script>
-    <script src="{{ url_for('static', filename='scripts/hud_logic.js') }}"></script>
+    
+    <script src="{{ url_for('static', filename='scripts/notebook.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='scripts/hud_logic.js') }}" defer></script>
 </head>
 <body>
     <div>
@@ -61,7 +63,7 @@
                                 <th width="45%">Desc</th>
                                 <th width="20%">Start</th>
                                 <th width="20%">End</th>
-                                <th width="10%"></th>
+                                <th width="10%">DEL</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,15 +170,15 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                         <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.7rem; color: #aaa;">LOGGED</div>
-                            <div style="font-size: 1.2rem; font-weight: bold; color: #fff;">--</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #fff;">{{ total_hours | default('0')}}</div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.7rem; color: #aaa;">DEEP WORK</div>
-                            <div style="font-size: 1.2rem; font-weight: bold; color: #2ecc71;">--</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #2ecc71;">{{ deep_hours | default('0')}}</div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.7rem; color: #aaa;">STREAK</div>
-                            <div style="font-size: 1.2rem; font-weight: bold; color: #f1c40f;">12</div>
+                            <div style="font-size: 1.2rem; font-weight: bold; color: #f1c40f;">{{ current_user.streak }}</div>
                         </div>
                         <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; text-align: center;">
                             <div style="font-size: 0.7rem; color: #aaa;">SYSTEM</div>
@@ -195,51 +197,6 @@
         </div>
 
     </div>
-
-
-    <script>
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(this, args), wait);
-            };
-        }
-
-        function saveNote(type, content, statusId) {
-            const statusSpan = document.getElementById(statusId);
-            statusSpan.innerText = "Saving...";
-            
-            fetch('/save_notes', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ type: type, content: content }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                statusSpan.innerText = "Saved at " + data.saved_at;
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                statusSpan.innerText = "Error!";
-            });
-        }
-
-        const quickInput = document.getElementById('quick_note_area');
-        const bookInput = document.getElementById('notebook_area');
-
-        if(quickInput) {
-            quickInput.addEventListener('input', debounce(function() {
-                saveNote('quick_note', this.value, 'status-quick');
-            }, 1000));
-        }
-
-        if(bookInput) {
-            bookInput.addEventListener('input', debounce(function() {
-                saveNote('notebook', this.value, 'status-book');
-            }, 1000));
-        }
-    </script>
 
 </body>
 </html>

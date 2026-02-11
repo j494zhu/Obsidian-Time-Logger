@@ -11,6 +11,8 @@ from datetime import datetime, timedelta, date
 
 from routes.login_return import login_bp
 from services.prompts import get_audit_prompt
+from services.stats import calculate_stats_from_logs
+from services.streak import update_user_streak
 
 app = Flask(__name__)
 app.secret_key = "dlB93f60saldD0"
@@ -46,8 +48,12 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     expenses = db.relationship('Expenses', backref='user', lazy=True)
+
     quick_note = db.Column(db.Text, default="")
     notebook = db.Column(db.Text, default="")
+
+    streak = db.Column(db.Integer, default=0)
+    last_check_in = db.Column(db.String(0), default=None)
 
 class Expenses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,7 +84,8 @@ with app.app_context():
 
 @app.route('/', methods=["POST", "GET"])
 @login_required
-def index():
+def index(): # get user lgo entry; 
+# it is one of the only three routings when the project was initially built :D
     # 1. POST: 添加新记录
     if request.method == 'POST':
         item_desc = request.form.get('desc')
@@ -98,6 +105,7 @@ def index():
                 archive_date=logical_date    # 标记它属于哪一天
             )
             db.session.add(item)
+            update_user_streak(current_user, logical_date)
             db.session.commit()
             return redirect('/')
         except Exception as e:
@@ -129,8 +137,10 @@ def index():
         
         # 重新获取剩下的、属于今天的记录
         expenses = Expenses.query.filter_by(user_id=current_user.id, is_archived=False).order_by(Expenses.timestamp.desc()).all()
+
+        total_h, deep_h = calculate_stats_from_logs(expenses)
         
-        return render_template('index.html', expenses=expenses)
+        return render_template('index.html', expenses=expenses, total_hours=total_h, deep_hours=deep_h)
 
 @app.route('/end_day', methods=['POST'])
 @login_required
