@@ -322,6 +322,11 @@ input[type="time"]:focus {
     color: #ffffff; /* 全局白色文字 */
     font-size: 0.95rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 轻微阴影增加层次感 */
+
+    /*new*/
+    table-layout: fixed; /* 关键：强制列宽由宽度决定，而不是内容 */
+    word-wrap: break-word; /* 允许长单词换行 */
+    overflow-wrap: break-word; /* 兼容性写法 */
 }
 
 /* 表头样式 */
@@ -338,7 +343,14 @@ input[type="time"]:focus {
 }
 
 /* 单元格通用样式 (表头和内容) - 实现行列分割线 */
-.glass-table th, 
+.glass-table th {
+    padding: 14px 16px;
+    text-align: left;
+    /* 这里定义分割线：半透明白色 */
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+    font-weight: normal;
+    text-align: center;
+}
 .glass-table td {
     padding: 14px 16px;
     text-align: left;
@@ -346,6 +358,11 @@ input[type="time"]:focus {
     border: 1px solid rgba(255, 255, 255, 0.15); 
     font-weight: normal;
     text-align: center;
+    white-space: normal; /* 允许文本换行 */
+    overflow: hidden; /* 隐藏溢出内容（虽然有了换行应该不会溢出，但作为双保险） */
+    text-overflow: ellipsis; /* 如果实在换行不了（比如超长无空格字符串），用省略号 */
+    /*new*/
+
 }
 
 /* 内容行悬停效果 */

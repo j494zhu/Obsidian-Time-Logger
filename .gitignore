@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 reset_db.py
 index-issues.txt
+核心.txt

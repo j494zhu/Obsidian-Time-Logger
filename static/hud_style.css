@@ -67,6 +67,16 @@
     padding-top: 15px;
     border-top: 1px dashed rgba(255, 255, 255, 0.15);
     animation: slideDown 0.4s ease-out;
+
+    /*new*/
+    max-height: 20vh;  /* 限制整个区域的最大高度 */
+    overflow-y: auto;   /* 内容一旦超高，这里出滚动条 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    width: 100%;        /* 确保占满宽度 */
+    
+    /* 美化滚动条 (Webkit) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 @keyframes slideDown { from {opacity: 0; transform: translateY(-10px);} to {opacity: 1; transform: translateY(0);} }
 
@@ -89,16 +99,31 @@
 
 /* AI 评语 */
 .hud-insight {
+    /* --- 视觉样式 (保持不变) --- */
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.9);
     text-align: center;
-    line-height: 1.4;
-    font-style: italic;
-    background: rgba(0, 0, 0, 0.2);
     padding: 10px;
     border-radius: 6px;
     width: 100%;
     box-sizing: border-box;
+    
+    /* --- 核心修复：拆掉小滚动条 --- */
+    /* 1. 强制不显示滚动条 */
+    overflow: visible !important; 
+    
+    /* 2. 强制高度自适应 (拆掉高度限制) */
+    height: auto !important;
+    max-height: none !important;
+    
+    /* 3. 文本换行设置 (防止长文本撑破) */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    
+    /* 4. 确保它不会被其他 Flex 元素挤压 */
+    flex-shrink: 0;
+
 }
 
 /* 警告信息 */
@@ -106,10 +131,33 @@
     margin-top: 8px;
     color: var(--neon-red);
     font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    gap: 5px;
     font-weight: bold;
+    
+    /* --- Flex 布局 --- */
+    display: flex;
+    /* 关键修改：改成 flex-start，让图标永远固定在左上角，而不是在多行文字中间尴尬地悬浮 */
+    align-items: flex-start; 
+    gap: 8px;
+    
+    /* --- 容器限制 --- */
+    width: 100%; 
+    box-sizing: border-box; 
+    text-align: left;
+}
+/* --- 新增：专门驯服警告文字 --- */
+.hud-warning span {
+    /* 1. 布局魔法 */
+    flex: 1;        /* 让文字占满除去图标后的所有剩余空间 */
+    min-width: 0;   /* 核心：允许文字区域收缩，触发换行机制 */
+    
+    /* 2. 强制换行三件套 */
+    white-space: pre-wrap;   /* 保留格式 */
+    word-wrap: break-word;   /* 正常单词换行 */
+    overflow-wrap: anywhere; /* 杀手锏：遇到超长 URL/代码，强制在任意位置切断换行 */
+    
+    /* 3. 阅读优化 */
+    line-height: 1.4;        /* 稍微拉开行距，防止密密麻麻 */
+    display: block;          /* 确保它作为块级元素处理 */
 }
 
 /* --- TONE SELECTOR STYLES (Minimalist Glow) --- */
@@ -176,4 +224,26 @@
     font-weight: bold;
     /* 核心：多重白色文字阴影制造发光效果 */
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+/* 针对 Webkit 浏览器 (Chrome, Edge, Safari) 的滚动条微调 */
+.hud-insight::-webkit-scrollbar {
+    width: 4px; /* 极细滚动条 */
+}
+.hud-insight::-webkit-scrollbar-track {
+    background: transparent;
+}
+.hud-insight::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+.hud-insight::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+.hud-content-area::-webkit-scrollbar {
+    width: 4px;
+}
+.hud-content-area::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }

@@ -29,9 +29,9 @@
 
 13. [unresolved] 添加暗色模式
 
-14. [unresolved] 右侧添加一个计时器
+14. [unresolved] 右侧添加一个倒计时
 
-15. [resolved] change login and register ui!!
+15. [resolved] 完成登陆以及注册页面的ui
 
 16. [cancelled] 添加更加炫酷的渐变动画
 
