@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Obsidian Logger</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index_body.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/hud_style.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index_entry.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/chart_style.css')}}">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     <script src="{{ url_for('static', filename='scripts/rain.js') }}" defer></script>
     <script src="{{ url_for('static', filename='scripts/notebook.js') }}" defer></script>
     <script src="{{ url_for('static', filename='scripts/hud_logic.js') }}" defer></script>
     <script src="{{ url_for('static', filename='scripts/pomodoro.js') }}" defer></script>
     <script src="{{ url_for('static', filename='scripts/record_time.js') }}" defer></script>
-    <script src="{{ url_for('static', filename='scripts/chart_theme.js') }}"></script>
+    
     <script src="{{ url_for('static', filename='scripts/chart_logic.js') }}"></script>
 
 </head>
@@ -151,38 +153,65 @@
 
             <div class="col-right" style="position: sticky; top: 20px; min-width: 0;">
 
-                <div class="glass-container" id="analytics-module" style="display: flex; flex-direction: column; min-height: 320px; padding: 15px; margin-bottom: 20px; position: relative;">
-                    <div class="analytics-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 15px;">
-                        <h4 class="glass-header-title" style="margin: 0; font-size: 0.9rem; letter-spacing: 1px; color: rgba(255,255,255,0.9);">
-                            DATA VISUALIZATION
-                        </h4>
-                        
-                        <div class="chart-controls" style="display: flex; gap: 5px;">
-                            <button class="chart-btn active" onclick="setChartType('doughnut')" title="Doughnut View">⭕</button>
-                            <button class="chart-btn" onclick="setChartType('bar')" title="Bar View">📊</button>
-                        </div>
+                <section class="viz-module" aria-label="Data Visualization">
+                    <!-- Header -->
+                    <header class="viz-header">
+                    <h2 class="viz-title">Data Visualization</h2>
+                    <div class="viz-toggle" role="tablist" aria-label="Chart type">
+                        <button
+                        class="viz-toggle__btn is-active"
+                        role="tab"
+                        aria-selected="true"
+                        data-chart="doughnut"
+                        aria-label="Doughnut chart"
+                        >
+                        <!-- SVG: Pie/Doughnut Icon -->
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M8 1.5A6.5 6.5 0 0 1 14.5 8H8V1.5Z" fill="currentColor" opacity="0.5"/>
+                        </svg>
+                        </button>
+                        <button
+                        class="viz-toggle__btn"
+                        role="tab"
+                        aria-selected="false"
+                        data-chart="bar"
+                        aria-label="Bar chart"
+                        >
+                        <!-- SVG: Bar Chart Icon -->
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <rect x="1" y="8" width="3" height="7" rx="0.75" fill="currentColor" opacity="0.5"/>
+                            <rect x="6.5" y="4" width="3" height="11" rx="0.75" fill="currentColor"/>
+                            <rect x="12" y="1" width="3" height="14" rx="0.75" fill="currentColor" opacity="0.5"/>
+                        </svg>
+                        </button>
+                    </div>
+                    </header>
+
+                    <!-- Chart Canvas Wrapper -->
+                    <div class="viz-chart-wrap">
+                    <div class="viz-chart-container">
+                        <canvas id="vizChart" aria-label="Category time distribution chart"></canvas>
                     </div>
 
-                    <div class="chart-wrapper" style="position: relative; flex: 1; width: 100%; min-height: 200px; display: flex; justify-content: center; align-items: center;">
-                        
-                        <canvas id="distributionChart"></canvas>
-                        
-                        <div id="chart-overlay" class="chart-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(20, 20, 20, 0.4); backdrop-filter: blur(4px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; border-radius: 8px; transition: opacity 0.4s;">
-                            
-                            <p style="margin-bottom: 15px; color: rgba(255,255,255,0.7); font-size: 0.8rem; letter-spacing: 1px;">
-                                Awaiting Analysis Protocol
-                            </p>
-                            
-                            <button onclick="generateChart()" class="run-analysis-btn" style="background: rgba(0, 255, 65, 0.1); border: 1px solid rgba(0, 255, 65, 0.4); color: #00ff41; padding: 8px 16px; font-family: 'Consolas', monospace; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 10px rgba(0, 255, 65, 0.1);">
-                                <span class="btn-icon">⚡</span> Initialize
-                            </button>
-                        </div>
+                    <!-- Loading Overlay -->
+                    <div class="viz-loader" aria-hidden="true">
+                        <div class="viz-loader__ring"></div>
                     </div>
-                    
-                    <div class="analytics-footer" style="margin-top: 15px; text-align: right; font-size: 0.7rem; color: rgba(255,255,255,0.3); border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;">
-                        <span id="total-tracked-time">Total Tracked: --h --m</span>
                     </div>
-                </div>
+
+                    <!-- Legend -->
+                    <ul class="viz-legend" aria-label="Chart legend">
+                    <!-- Populated by JS -->
+                    </ul>
+
+                    <!-- Summary Footer -->
+                    <footer class="viz-footer">
+                    <span class="viz-footer__label">Total Tracked</span>
+                    <span class="viz-footer__value" id="vizTotal">—</span>
+                    </footer>
+                </section>
+                
 
                 <div class="glass-container ai-hud-module" style="display: flex; flex-direction: column;">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
