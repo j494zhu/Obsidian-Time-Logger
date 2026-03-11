@@ -1,0 +1,27 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<div style="text-align: center; margin-top: 30px">
+    <h2>Username Does Not Exist </h2>
+    
+    <p>You will be redirected to the register page after 
+        <span id="countdown"> 3 </span> seconds.
+    </p>
+
+</div>
+
+<script>
+    let seconds = 3;
+    const sec = document.getElementById('countdown');
+
+    const timer = setInterval(() => {
+        seconds -= 1;
+        sec.textContent = seconds;
+
+        if (seconds <= 0) {
+            clearInterval(timer);
+            window.location.href = "{{ url_for('register')}}"
+        }
+    }, 1000);
+</script>
+{% endblock %}

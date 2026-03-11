@@ -1,0 +1,249 @@
+/* ========================================== */
+/* MODULE: NEURAL AUDIT HUD                   */
+/* 依赖: index_body.css (glass-container)     */
+/* ========================================== */
+
+:root {
+    --neon-green: #00ff41;
+    --neon-yellow: #ffcc00;
+    --neon-red: #ff3333;
+}
+
+/* 微调 HUD 容器，使其在通用的 glass-container 基础上更像仪表盘 */
+.ai-hud-module {
+    /* 稍微加深一点背景，突出它是控制中心 */
+    background: rgba(20, 20, 20, 0.3) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px; /* 和下方的 Quick Note 隔开 */
+    transition: all 0.3s ease;
+}
+
+/* 呼吸灯动画 */
+.status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    background-color: var(--neon-green);
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 8px var(--neon-green);
+    animation: blink 3s infinite;
+}
+@keyframes blink { 0%, 100% {opacity: 1;} 50% {opacity: 0.4;} }
+
+/* 触发按钮 - 继承并修改你的 green-button */
+.hud-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px;
+    margin-top: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.hud-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+.hud-btn:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+/* 结果显示区域 (默认隐藏) */
+.hud-content-area {
+    display: none; /* JS 控制显示 */
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+    animation: slideDown 0.4s ease-out;
+
+    /*new*/
+    max-height: 20vh;  /* 限制整个区域的最大高度 */
+    overflow-y: auto;   /* 内容一旦超高，这里出滚动条 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    width: 100%;        /* 确保占满宽度 */
+    
+    /* 美化滚动条 (Webkit) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+@keyframes slideDown { from {opacity: 0; transform: translateY(-10px);} to {opacity: 1; transform: translateY(0);} }
+
+/* 分数大字 */
+.hud-score {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+
+.hud-score-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+/* AI 评语 */
+.hud-insight {
+    /* --- 视觉样式 (保持不变) --- */
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+    
+    /* --- 核心修复：拆掉小滚动条 --- */
+    /* 1. 强制不显示滚动条 */
+    overflow: visible !important; 
+    
+    /* 2. 强制高度自适应 (拆掉高度限制) */
+    height: auto !important;
+    max-height: none !important;
+    
+    /* 3. 文本换行设置 (防止长文本撑破) */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    
+    /* 4. 确保它不会被其他 Flex 元素挤压 */
+    flex-shrink: 0;
+
+}
+
+/* 警告信息 */
+.hud-warning {
+    margin-top: 8px;
+    color: var(--neon-red);
+    font-size: 0.8rem;
+    font-weight: bold;
+    
+    /* --- Flex 布局 --- */
+    display: flex;
+    /* 关键修改：改成 flex-start，让图标永远固定在左上角，而不是在多行文字中间尴尬地悬浮 */
+    align-items: flex-start; 
+    gap: 8px;
+    
+    /* --- 容器限制 --- */
+    width: 100%; 
+    box-sizing: border-box; 
+    text-align: left;
+}
+/* --- 新增：专门驯服警告文字 --- */
+.hud-warning span {
+    /* 1. 布局魔法 */
+    flex: 1;        /* 让文字占满除去图标后的所有剩余空间 */
+    min-width: 0;   /* 核心：允许文字区域收缩，触发换行机制 */
+    
+    /* 2. 强制换行三件套 */
+    white-space: pre-wrap;   /* 保留格式 */
+    word-wrap: break-word;   /* 正常单词换行 */
+    overflow-wrap: anywhere; /* 杀手锏：遇到超长 URL/代码，强制在任意位置切断换行 */
+    
+    /* 3. 阅读优化 */
+    line-height: 1.4;        /* 稍微拉开行距，防止密密麻麻 */
+    display: block;          /* 确保它作为块级元素处理 */
+}
+
+/* --- TONE SELECTOR STYLES (Minimalist Glow) --- */
+.hud-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* 加个顶部分割线，更整齐 */
+}
+
+.control-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4); /*稍微暗一点 */
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.tone-selector {
+    display: flex;
+    align-items: center;
+    /* 移除之前的背景和边框 */
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+/* 隐藏原生单选框 */
+.tone-selector input[type="radio"] {
+    display: none;
+}
+
+/* 标签默认样式 (未选中：暗淡) */
+.tone-selector label {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.3); /* 默认很暗 */
+    transition: all 0.3s ease;
+    font-weight: 500;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+/* 添加分割线 (竖线 | ) */
+/* 逻辑：除了最后一个标签外，其他标签后面都加一个竖线 */
+.tone-selector label:not(:last-of-type)::after {
+    content: '|';
+    position: absolute;
+    right: -2px;
+    color: rgba(255, 255, 255, 0.1); /* 分割线非常暗 */
+    font-weight: 100;
+}
+
+/* 鼠标悬停样式 */
+.tone-selector label:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* --- 选中状态：白色高光发亮 --- */
+.tone-selector input:checked + label {
+    color: rgba(255, 255, 255, 0.9); /* 文字纯白 */
+    font-weight: bold;
+    /* 核心：多重白色文字阴影制造发光效果 */
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+/* 针对 Webkit 浏览器 (Chrome, Edge, Safari) 的滚动条微调 */
+.hud-insight::-webkit-scrollbar {
+    width: 4px; /* 极细滚动条 */
+}
+.hud-insight::-webkit-scrollbar-track {
+    background: transparent;
+}
+.hud-insight::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+.hud-insight::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+.hud-content-area::-webkit-scrollbar {
+    width: 4px;
+}
+.hud-content-area::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}

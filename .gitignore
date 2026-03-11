@@ -1,0 +1,14 @@
+venv/
+instance/
+__pycache__/
+*.db
+*.pyc
+reset_db.py
+index-issues.txt
+核心.txt
+草稿.txt
+聊天.txt
+check_models.py
+.env
+test.py
+test2.py

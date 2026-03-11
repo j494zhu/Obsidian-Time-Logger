@@ -1,0 +1,430 @@
+/* ═══════════════════════════════════════════
+   NEURAL ARCHIVES — History Page Styles
+   ═══════════════════════════════════════════ */
+
+body {
+    min-height: 100vh;
+    background-attachment: fixed;
+}
+
+/* ── Header ─────────────────────────────── */
+.archive-header {
+    text-align: center;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+}
+
+.archive-title {
+    color: #fff;
+    font-size: 2rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.archive-subtitle {
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    padding: 8px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #2ecc71;
+    border-color: #2ecc71;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.2);
+}
+
+/* ── Navigation Controls ────────────────── */
+.nav-controls {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mode-switch {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    padding: 4px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mode-btn {
+    padding: 8px 24px;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-family: monospace;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.mode-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mode-btn.active {
+    color: #fff;
+    background: rgba(52, 152, 219, 0.25);
+    border-color: rgba(52, 152, 219, 0.4);
+    box-shadow: 0 0 12px rgba(52, 152, 219, 0.15);
+}
+
+.time-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.nav-arrow {
+    padding: 10px 18px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: monospace;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.nav-arrow:hover:not(.disabled) {
+    background: rgba(52, 152, 219, 0.15);
+    border-color: rgba(52, 152, 219, 0.4);
+    color: #3498db;
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.15);
+}
+
+.nav-arrow.disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.nav-label {
+    text-align: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.nav-label-text {
+    display: block;
+    color: #fff;
+    font-family: monospace;
+    font-size: 1.05rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+.nav-label-count {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.7rem;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.today-btn {
+    display: inline-block;
+    padding: 5px 16px;
+    font-size: 0.75rem;
+    font-family: monospace;
+    color: rgba(46, 204, 113, 0.8);
+    text-decoration: none;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+    border-radius: 20px;
+    background: rgba(46, 204, 113, 0.06);
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+.today-btn:hover {
+    background: rgba(46, 204, 113, 0.15);
+    border-color: rgba(46, 204, 113, 0.5);
+    color: #2ecc71;
+    box-shadow: 0 0 12px rgba(46, 204, 113, 0.15);
+}
+
+/* ── Date Group ─────────────────────────── */
+.history-group {
+    margin-bottom: 20px;
+}
+
+.date-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: rgba(52, 152, 219, 0.08);
+    padding: 14px 20px;
+    border-radius: 10px 10px 0 0;
+    margin-top: 20px;
+    border-left: 3px solid #3498db;
+    border-bottom: 1px solid rgba(52, 152, 219, 0.12);
+}
+
+.date-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.date-text {
+    color: #fff;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 1.05rem;
+}
+
+.date-weekday {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.date-header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.date-stat {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #aaa;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+.date-stat.highlight {
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.date-stat.focus {
+    color: #f39c12;
+    border: 1px solid rgba(243, 156, 18, 0.2);
+}
+
+.date-stat-sep {
+    color: rgba(255, 255, 255, 0.15);
+    font-size: 0.6rem;
+}
+
+/* ── Category Distribution Bar ──────────── */
+.day-stats-bar {
+    display: flex;
+    height: 6px;
+    border-radius: 0;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.stat-segment {
+    position: relative;
+    min-width: 4px;
+    transition: opacity 0.3s ease;
+    cursor: default;
+}
+
+.stat-segment:hover {
+    opacity: 0.75;
+}
+
+.stat-segment-label {
+    display: none;
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-family: monospace;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-segment:hover .stat-segment-label {
+    display: block;
+}
+
+/* Assign colors to segments by position */
+.stat-segment:nth-child(1)  { background: #3498db; }
+.stat-segment:nth-child(2)  { background: #2ecc71; }
+.stat-segment:nth-child(3)  { background: #e74c3c; }
+.stat-segment:nth-child(4)  { background: #f39c12; }
+.stat-segment:nth-child(5)  { background: #9b59b6; }
+.stat-segment:nth-child(6)  { background: #1abc9c; }
+.stat-segment:nth-child(7)  { background: #e67e22; }
+.stat-segment:nth-child(8)  { background: #ecf0f1; }
+.stat-segment:nth-child(n+9) { background: #7f8c8d; }
+
+/* ── Log Items ──────────────────────────── */
+.log-list {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+}
+
+.log-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 15px;
+    padding: 14px 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.2s ease;
+}
+
+.log-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.log-item:last-child {
+    border-bottom: none;
+}
+
+.log-time {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #888;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    padding-right: 15px;
+}
+
+.log-time-start {
+    color: #fff;
+}
+
+.log-time-sep {
+    opacity: 0.25;
+    font-size: 0.55rem;
+    line-height: 1;
+}
+
+.log-time-end {
+    opacity: 0.5;
+}
+
+.log-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.log-desc {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.log-tag {
+    font-size: 0.7rem;
+    color: #3498db;
+    margin-top: 4px;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* ── Empty State ────────────────────────── */
+.empty-state {
+    text-align: center;
+    padding: 60px 0 50px;
+    color: #666;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    opacity: 0.3;
+}
+
+.empty-state p {
+    margin: 4px 0;
+}
+
+.empty-hint {
+    font-size: 0.8rem;
+    color: #555;
+}
+
+/* ── Responsive ─────────────────────────── */
+@media (max-width: 600px) {
+    .time-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-arrow {
+        width: 100%;
+        text-align: center;
+    }
+
+    .mode-switch {
+        width: 100%;
+    }
+
+    .mode-btn {
+        flex: 1;
+        text-align: center;
+    }
+
+    .date-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .date-header-right {
+        width: 100%;
+    }
+
+    .log-item {
+        grid-template-columns: 65px 1fr;
+        gap: 10px;
+        padding: 12px;
+    }
+}

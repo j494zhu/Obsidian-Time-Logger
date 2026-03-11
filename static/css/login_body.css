@@ -1,0 +1,63 @@
+body {
+    background-image: url('../images/Obsidian/4k-forest-7sfd6znw2ry6hnlt.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/* 针对 glass-container 里的输入框进行特殊处理 */
+.glass-container input[type="text"],
+.glass-container input[type="password"] {
+    /* 核心：背景改为半透明白色 */
+    background: rgba(255, 255, 255, 0.15); 
+    
+    /* 边框也弄淡一点 */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    
+    /* 输入的文字要是白色的，不然看不清 */
+    color: white; 
+    
+    /* 去掉默认的圆角可能会更硬朗一点，或者保持你原来的圆角 */
+    border-radius: 8px;
+}
+
+/* 鼠标点进去（聚焦）的时候，稍微亮一点，提示用户 */
+.glass-container input:focus {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.8);
+    outline: none;
+}
+
+/* 这是一个容易被忽略的细节：把 placeholder (如果有的话) 也改成浅白色 */
+.glass-container input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.glass-container button {
+    /* 使用渐变色，从深绿到青色，更有质感 */
+    background: linear-gradient(135deg, #5e9b96 0%, #55cc83 100%);
+    
+    /* 加一点阴影让它浮起来 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border: none;
+    font-weight: bold;
+    letter-spacing: 1px; /* 字母间距拉开一点点显高级 */
+}
+
+.glass-container button:hover {
+    /* 悬停时稍微放大一点点 */
+    transform: translateY(-1px);
+    /*box-shadow: 0 6px 20px rgba(56, 239, 125, 0.2); /* 发一点绿色的光 */
+}
+
+.glass-container {
+    background: rgba(255, 255, 255, 0.15); /* 半透明背景 */
+    backdrop-filter: blur(10px);          /* 核心：毛玻璃模糊效果 */
+    -webkit-backdrop-filter: blur(10px);  /* 兼容 Safari 浏览器 */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* 细微边框增强质感 */
+    border-radius: 15px;                  /* 圆角 */
+    padding: 20px;
+    color: white;
+}
+
+

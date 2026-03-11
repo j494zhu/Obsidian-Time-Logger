@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onyx — Neural Engine</title>
+
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <!-- Unified Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+  <header class="dash-header">
+    <h2 class="dash-title">{{ current_user.username }}'s Log</h2>
+    <nav class="dash-nav">
+      <!-- Dark Mode Toggle -->
+      <div class="dm-toggle" id="dm-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+        <span class="dm-toggle__icon dm-toggle__icon--sun">☀</span>
+        <span class="dm-toggle__icon dm-toggle__icon--moon">☽</span>
+        <span class="dm-toggle__slider" id="dm-slider"></span>
+      </div>
+      <span class="nav-divider">|</span>
+      <a href="/logs/history" class="nav-link nav-link--gold">View History</a>
+      <span class="nav-divider">|</span>
+      <button onclick="openWeeklyInsight()" class="nav-link nav-link--blue">Weekly Intel</button>
+      <span class="nav-divider">|</span>
+      <a href="/auth/logout" class="nav-link nav-link--rose">Logout</a>
+    </nav>
+  </header>
+
+  <!-- ═══ BENTO GRID ═══════════════════════════════════════ -->
+  <main class="bento-grid">
+
+    <!-- ─── SESSION (Clock + Input) ─── -->
+    <section class="widget widget-session">
+      <div class="session-clock">
+        <div id="digital-clock" class="session-clock__display">
+          00<span class="blink-colon">:</span>00
+        </div>
+      </div>
+      <form action="/logs" method="POST" id="log-form" class="session-form">
+        <input
+          type="text" name="desc" id="desc_input"
+          class="session-form__input"
+          placeholder="Input log description..."
+          required autocomplete="off">
+        <div class="session-form__hidden">
+          <input type="time" id="start_time" name="start_time" required>
+          <input type="time" id="end_time" name="end_time" required>
+        </div>
+        <button type="button" id="record-btn" class="btn-session btn-session--cta" onclick="toggleRecording()">
+          ● Start Session
+        </button>
+        <button type="submit" id="submit-btn" class="btn-session btn-session--confirm">
+          Confirm Log
+        </button>
+      </form>
+    </section>
+
+    <!-- ─── HISTORY FLOW ─── -->
+    <section class="widget-history">
+      <header class="widget__header">
+        <h3 class="widget__title"># History Flow</h3>
+      </header>
+      <div class="history-scroll">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th class="col-index">#</th>
+              <th class="col-desc">Desc</th>
+              <th class="col-time">Start</th>
+              <th class="col-time">End</th>
+              <th class="col-del">Del</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in expenses %}
+            <tr>
+              <td class="col-index">{{ loop.index }}</td>
+              <td class="col-desc">{{ item.desc }}</td>
+              <td class="col-time">{{ item.start_time }}</td>
+              <td class="col-time">{{ item.end_time }}</td>
+              <td class="col-del">
+                <form action="/logs/{{ item.id }}" method="POST" style="margin:0;">
+                  <button type="submit" class="btn-delete">×</button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+            {% if expenses|length == 0 %}
+            <tr>
+              <td colspan="5" class="history-empty">— No Records Yet —</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── ARCHIVE DAY ─── -->
+    <section class="widget widget-archive">
+      <span class="archive-label">End of Watch?</span>
+      <form action="/logs/archive" method="POST" onsubmit="return confirm('End Day? Quick Notes will be cleared.');">
+        <button type="submit" class="btn-archive">Archive Day</button>
+      </form>
+    </section>
+
+    <!-- ─── QUICK NOTES (To-Do) ─── -->
+    <section class="widget widget-todo">
+      <header class="widget__header">
+        <h3 class="widget__title"># To-Do List</h3>
+        <span id="status-quick" class="widget__badge">Daily Cleared</span>
+      </header>
+      <textarea
+        id="quick_note_area"
+        class="note-textarea"
+        placeholder="Capture fleeting thoughts...">{{ current_user.quick_note }}</textarea>
+    </section>
+
+    <!-- ─── NOTEBOOK ─── -->
+    <section class="widget widget-notebook">
+      <header class="widget__header">
+        <h3 class="widget__title"># NoteBook</h3>
+        <span id="status-book" class="widget__badge">Permanent</span>
+      </header>
+      <textarea
+        id="notebook_area"
+        class="note-textarea"
+        placeholder="Long-term storage...">{{ current_user.notebook }}</textarea>
+    </section>
+
+    <!-- ─── DATA VISUALIZATION ─── -->
+    <section class="widget widget-dataviz">
+      <header class="viz-header">
+        <h3 class="viz-title">Data Visualization</h3>
+        <div class="viz-toggle" role="tablist">
+          <button class="viz-toggle__btn is-active" role="tab" aria-selected="true" data-chart="doughnut">Donut</button>
+          <button class="viz-toggle__btn" role="tab" aria-selected="false" data-chart="bar">Bar</button>
+        </div>
+      </header>
+
+      <div class="viz-chart-wrap">
+        <div class="viz-chart-container">
+          <canvas id="vizChart" aria-label="Category time distribution chart"></canvas>
+        </div>
+
+        <!-- Empty State -->
+        <div class="viz-empty" id="vizEmpty">
+          <div class="viz-empty__icon"></div>
+          <span class="viz-empty__title">Awaiting Data Input</span>
+          <span class="viz-empty__sub">Log sessions to unlock telemetry matrix</span>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="viz-loader" aria-hidden="true">
+          <div class="viz-loader__ring"></div>
+        </div>
+      </div>
+
+      <ul class="viz-legend" aria-label="Chart legend"></ul>
+
+      <footer class="viz-footer">
+        <span class="viz-footer__label">Total Tracked</span>
+        <span class="viz-footer__value" id="vizTotal">—</span>
+      </footer>
+    </section>
+
+    <!-- ─── NEURAL AUDIT ─── -->
+    <section class="widget widget-neural">
+      <header class="widget__header">
+        <h3 class="widget__title">
+          <span id="hud-status-dot" class="status-dot"></span>
+          Neural Audit
+        </h3>
+        <span id="hud-status-text" class="widget__badge">Standby</span>
+      </header>
+
+      <div class="hud-controls">
+        <span class="control-label">TONE:</span>
+        <div class="tone-selector">
+          <input type="radio" id="tone-strict" name="ai_tone" value="strict" checked>
+          <label for="tone-strict" title="Ruthless logic">STRICT</label>
+          <input type="radio" id="tone-roast" name="ai_tone" value="roast">
+          <label for="tone-roast" title="Emotional damage">ROAST</label>
+          <input type="radio" id="tone-gentle" name="ai_tone" value="gentle">
+          <label for="tone-gentle" title="Mental support">GENTLE</label>
+        </div>
+      </div>
+
+      <div id="hud-content" class="hud-content-area">
+        <div class="hud-score-wrap">
+          <span id="hud-score-val" class="hud-score">--</span>
+          <div class="hud-score-label">Productivity Score</div>
+        </div>
+        <div id="hud-insight-text" class="hud-insight">System Ready. Awaiting uplink...</div>
+        <div id="hud-warning-box" class="hud-warning" style="display:none;">
+          ⚠ <span id="hud-warn-text"></span>
+        </div>
+      </div>
+
+      <button id="audit-btn" class="btn-audit" onclick="runNeuralAudit()">Initialize Scan</button>
+
+      <div id="rlhf-zone" class="rlhf-zone">
+        <p class="rlhf-zone__label">Train Neural Twin</p>
+        <div class="rlhf-zone__buttons">
+          <button onclick="submitRLHF(1)" class="rlhf-btn">😫</button>
+          <button onclick="submitRLHF(3)" class="rlhf-btn">😐</button>
+          <button onclick="submitRLHF(5)" class="rlhf-btn">🤩</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── DATA MATRIX ─── -->
+    <section class="widget widget-matrix">
+      <header class="widget__header">
+        <h3 class="widget__title"># Data Matrix</h3>
+      </header>
+      <div class="matrix-grid">
+        <div class="matrix-cell">
+          <span class="matrix-cell__label">Logged</span>
+          <span class="matrix-cell__value">{{ total_hours | default('0') }}</span>
+        </div>
+        <div class="matrix-cell">
+          <span class="matrix-cell__label">Deep Work</span>
+          <span class="matrix-cell__value matrix-cell__value--teal">{{ deep_hours | default('0') }}</span>
+        </div>
+        <div class="matrix-cell">
+          <span class="matrix-cell__label">Streak</span>
+          <span class="matrix-cell__value matrix-cell__value--gold">{{ current_user.streak }}</span>
+        </div>
+        <div class="matrix-cell matrix-cell--rlhf">
+          <span class="matrix-cell__label">RLHF Dataset</span>
+          <span class="matrix-cell__value matrix-cell__value--blue">{{ rlhf_count|default(0) }}</span>
+          <div class="matrix-rlhf-bar">
+            <div class="matrix-rlhf-bar__fill" style="width:{{ model_confidence }}%;"></div>
+          </div>
+          <span class="matrix-rlhf-badge">Active Learning</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── POMODORO ─── -->
+    <section class="widget widget-pomo">
+      <header class="widget__header">
+        <h3 class="widget__title"># Pomodoro</h3>
+      </header>
+      <div id="pomo-cycle-dots" class="pomo-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <div id="pomo-timer-display" class="pomo-display">25:00</div>
+      <div id="pomo-status-text" class="pomo-status">READY TO FOCUS</div>
+      <button id="pomo-btn" class="btn-pomo" onclick="togglePomodoro()">INITIALIZE SEQUENCE</button>
+    </section>
+
+  </main>
+
+  <!-- ═══ MODAL: WEEKLY INTEL ═══════════════════════════════ -->
+  <div id="insight-modal" class="modal-overlay">
+    <div id="insight-card" class="modal-card">
+
+      <div id="card-color-bar" class="modal-color-bar"></div>
+
+      <button onclick="closeInsight()" class="modal-close" aria-label="Close modal">&times;</button>
+
+      <div class="modal-body">
+        <div class="modal-overline">NEURAL SYNTHESIS</div>
+        <h2 id="card-week-label" class="modal-title">Loading...</h2>
+
+        <span id="card-phase" class="modal-phase">CALCULATING PHASE...</span>
+
+        <div class="modal-stats">
+          <div class="modal-stat">
+            <div class="modal-stat__label">Deep Ratio</div>
+            <div id="card-dw-ratio" class="modal-stat__value">--</div>
+          </div>
+          <div class="modal-stat">
+            <div class="modal-stat__label">Peak Window</div>
+            <div id="card-peak" class="modal-stat__value">--:--</div>
+          </div>
+        </div>
+
+        <div class="modal-section-label">Major Achievement</div>
+        <div id="card-achievement" class="modal-section-text">--</div>
+
+        <div id="card-roast-box" class="modal-roast-box">
+          <div class="modal-roast-box__header">⚠️ ANOMALY DETECTED</div>
+          <div id="card-roast" class="modal-roast-box__text">--</div>
+        </div>
+
+        <div class="modal-section-label">Optimization Protocol</div>
+        <div id="card-advice" class="modal-section-text">--</div>
+
+        <!-- RLHF Feedback -->
+        <div id="insight-feedback-box" class="modal-feedback">
+          <span class="modal-feedback__label">Rate Analysis Accuracy</span>
+          <div class="modal-feedback__buttons">
+            <button onclick="submitInsightFeedback(5)" class="modal-feedback__btn modal-feedback__btn--accurate">✅ Accurate</button>
+            <button onclick="submitInsightFeedback(1)" class="modal-feedback__btn modal-feedback__btn--reject">❌ Hallucination</button>
+          </div>
+        </div>
+
+        <div id="insight-feedback-success" class="modal-feedback-success">
+          <span class="modal-feedback-success__icon">✓</span>
+          <span class="modal-feedback-success__text">Protocol Updated</span>
+          <span class="modal-feedback-success__sub">Thanks for your feedback</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">GENERATED BY ONYX NEURAL ENGINE</div>
+
+    </div>
+  </div>
+
+  <!-- ═══ SCRIPTS ═══════════════════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="{{ url_for('static', filename='scripts/dashboard.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/dark_mode.js') }}"></script>
+
+</body>
+</html>

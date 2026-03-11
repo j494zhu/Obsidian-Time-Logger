@@ -1,0 +1,38 @@
+
+/* 定义动画 */
+@keyframes shake-and-fade {
+    0% {
+        transform: translateX(0) rotate(0deg);
+        color: red;
+    }
+    20% {
+        transform: translateX(-10px) rotate(-2deg);
+        color: red;
+    }
+    40% {
+        transform: translateX(10px) rotate(2deg);
+        color: red;
+    }
+    60% {
+        transform: translateX(-10px) rotate(-2deg);
+        color: red;
+    }
+    80% {
+        transform: translateX(10px) rotate(2deg);
+        color: red;
+    }
+    100% {
+        transform: translateX(0) rotate(0deg);
+        color: whitesmoke; /* 动画结束后变回黑色 */
+    }
+}
+
+/* 创建一个类来调用动画 */
+.shake-error {
+    display: inline-block; /* 必须设置这个，transform 才会生效 */
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    /* 动画持续 0.5 秒，执行 1 次，停留在最后一帧的状态 */
+    animation: shake-and-fade 0.5s ease-in-out forwards;
+}

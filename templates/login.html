@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/shake.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login_body.css')}}">
+    </head>
+    <body>
+        
+        <div class="container glass-container" style="max-width: 400px; margin-top: 100px;">
+            
+            <h1 style="text-align: center; color: white">Welcome Back</h1>
+
+            <form action="/auth/login" method="POST">
+                <label>Username:</label>
+                <input type="text" name="username" required>
+
+                <label>Password:</label>
+                <input type="password" name="password" required>
+
+                <button type="submit">Login</button>
+
+                {% if wrong_password %}
+                    <p style="text-align: center; font-size: 15px" class="shake-error"> Incorrect password, please try again.</p>
+                {% elif user_dne%}
+                    <p style="text-align: center; font-size: 15px" class="shake-error"> Username does not exist, please register first.</p>
+                {% endif %}
+            </form>
+            <hr>
+            <p style="text-align: center; margin-top: 20px;">
+                New here? <a href="/auth/register">Register an account!</a>
+            </p>
+            
+        </div>
+        </body>
+</html>

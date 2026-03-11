@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Neural Archives</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login_body.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+</head>
+<body>
+
+    <div class="container glass-container" style="max-width: 850px; margin-top: 60px; margin-bottom: 60px;">
+
+        <!-- ═══ HEADER ═══ -->
+        <header class="archive-header">
+            <a href="/dashboard" class="back-btn">
+                <span>← RETURN TO UPLINK</span>
+            </a>
+            <h1 class="archive-title">NEURAL ARCHIVES</h1>
+            <p class="archive-subtitle">IMMUTABLE BEHAVIOR LOGS</p>
+        </header>
+
+        <!-- ═══ CONTROLS ═══ -->
+        <div class="nav-controls">
+            <div class="mode-switch">
+                <a href="{{ url_for('logs_history', mode='day', offset=0) }}"
+                   class="mode-btn {{ 'active' if mode == 'day' }}">◉ DAY</a>
+                <a href="{{ url_for('logs_history', mode='week', offset=0) }}"
+                   class="mode-btn {{ 'active' if mode == 'week' }}">◎ WEEK</a>
+            </div>
+
+            <div class="time-nav">
+                {% if has_older %}
+                <a href="{{ url_for('logs_history', mode=mode, offset=offset - 1) }}" class="nav-arrow">‹ PREV</a>
+                {% else %}
+                <span class="nav-arrow disabled">‹ PREV</span>
+                {% endif %}
+
+                <div class="nav-label">
+                    <span class="nav-label-text">{{ label }}</span>
+                    <span class="nav-label-count">{{ total_entries }} ENTRIES · {{ range_total_hours }} LOGGED
+                        {% if mode == 'week' and range_days > 0 %} · {{ range_days }} DAYS{% endif %}
+                    </span>
+                </div>
+
+                {% if not next_disabled %}
+                <a href="{{ url_for('logs_history', mode=mode, offset=offset + 1) }}" class="nav-arrow">NEXT ›</a>
+                {% else %}
+                <span class="nav-arrow disabled">NEXT ›</span>
+                {% endif %}
+            </div>
+
+            {% if offset != 0 %}
+            <div style="text-align: center; margin-top: 8px;">
+                <a href="{{ url_for('logs_history', mode=mode, offset=0) }}" class="today-btn">⟳ TODAY</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- ═══ DATA ═══ -->
+        {% if grouped_history %}
+            {% for date, day_data in grouped_history.items() %}
+                {% set stats = day_data['stats'] %}
+                {% set items = day_data['items'] %}
+
+                <div class="history-group">
+                    <!-- ── 日期头：带统计 ── -->
+                    <div class="date-header">
+                        <div class="date-header-left">
+                            <span class="date-text">📅 {{ date.strftime('%Y-%m-%d') }}</span>
+                            <span class="date-weekday">{{ date.strftime('%A') }}</span>
+                        </div>
+                        <div class="date-header-right">
+                            <span class="date-stat">{{ stats.entry_count }} entries</span>
+                            <span class="date-stat-sep">·</span>
+                            <span class="date-stat highlight">{{ stats.total_hours }}</span>
+                            <span class="date-stat-sep">·</span>
+                            <span class="date-stat focus">Focus {{ stats.focus_pct }}%</span>
+                        </div>
+                    </div>
+
+                    <!-- ── 统计条：分类时间分布 ── -->
+                    {% if stats.category_minutes %}
+                    <div class="day-stats-bar">
+                        {% for cat, minutes in stats.category_minutes.items() %}
+                        {% set pct = (minutes / stats.total_minutes * 100) | round(1) if stats.total_minutes > 0 else 0 %}
+                        <div class="stat-segment" style="flex: {{ pct }};" title="{{ cat }}: {{ (minutes / 60) | round(1) }}h ({{ pct | int }}%)">
+                            <span class="stat-segment-label">{{ cat }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- ── 记录列表 ── -->
+                    <div class="log-list">
+                        {% for item in items %}
+                        <div class="log-item">
+                            <div class="log-time">
+                                <span class="log-time-start">{{ item.start_time }}</span>
+                                <span class="log-time-sep">│</span>
+                                <span class="log-time-end">{{ item.end_time }}</span>
+                            </div>
+                            <div class="log-content">
+                                <span class="log-desc">{{ item.desc }}</span>
+                                {% if item.category %}
+                                <span class="log-tag">#{{ item.category }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">📂</div>
+                <p>NO DATA FRAGMENTS IN THIS RANGE.</p>
+                <p class="empty-hint">Try navigating to a different {{ "day" if mode == "day" else "week" }}.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
